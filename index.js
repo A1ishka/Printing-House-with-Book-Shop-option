@@ -1,15 +1,17 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import { validationResult } from 'express-validator';
-import { registerValidation } from './validations/auth.js';
+import * as Validations from './validations/auth.js';
 
 import UserModel from './models/User.js';
 import checkAuth from './utils/checkAuth.js';
 import handleValidationErrors from './utils/handleValidationErrors.js';
 
-
-import * as UserController from './controllers/UserController.js'
-import * as BookController from './controllers/BookController.js'
+import * as UserController from './controllers/UserController.js';
+import * as BookController from './controllers/BookController.js';
+import * as RoleController from './controllers/RoleController.js';
+import * as PreOrderController from './controllers/PreOrderController.js';
+import * as OrderController from './controllers/OrderController.js';
 
 mongoose
 .connect('mongodb+srv://alika:qv8GdxBfWhxHT5YE@cluster0.kpu7dbl.mongodb.net/book?retryWrites=true&w=majority')
@@ -18,49 +20,40 @@ mongoose
 
 const app = express();
 app.use(express.json());
-
-app.get('/', (req, res) => {
-    res.send('Hello');
-});
+app.get('/', (req, res) => { res.send('Hello'); });
 
 app.post('/auth/login', UserController.login);
-app.post('/auth/register', registerValidation, UserController.register);
+app.post('/auth/register', Validations.registerValidation, UserController.register);
 app.post('/auth/me', checkAuth, UserController.getMe);
 
 app.get('/tags', BookController.getLastTags);
 
 app.get('/books', BookController.getAll);
+app.get('/book-by-name', BookController.getBookByName);
 app.get('/books/tags', BookController.getLastTags);
 app.get('/books/:id', BookController.getOne);
-app.post('/books', /*checkAuth,*/ handleValidationErrors, BookController.create);
-app.delete('/books/:id', /*checkAuth,*/ BookController.remove);
-/*app.post("/deletebooks/:id" , async ( req , res ) =>{ //не работает совершенно!!! переделать логику выполнения
-    try{
-        await BookModel.findOneAndRemove({
-        _id: req.params.id  
-        })
-    .then(doc => {
-        res.json(doc); 
-     });
-
-    } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: 'Не удалось получить книги',
-    });
-  }
-});*/
-/*app.patch(
+app.post('/books', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), handleValidationErrors, BookController.create);
+app.delete('/books/:id', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), BookController.remove);
+app.patch(
   '/books/:id',
-  checkAuth,
-  bookCreateValidation,
-  handleValidationErrors,
-  BookController.update,
-);*/
+  checkAuth, Validations.bookCreateValidation,
+  handleValidationErrors, BookController.update,
+);
+
+app.post('/pre-order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.createPreOrder);
+app.patch('/pre-order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.updatePreOrder);
+app.post('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.createOrder);
+app.patch('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.addToOrder);
+app.delete('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.removeFromOrder);
+app.patch('/order-status', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.changeStatus);
+
+app.get('/order/:id', OrderController.getOrderById);
+
+app.post('/adminrolecheck', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), BookController.getAll);
+app.post('/userrolecheck', checkAuth, RoleController.isUser(['USER', 'ADMIN']), BookController.getLastTags);
+
 
 app.listen(5050, (err) =>{
-    if (err){
-        return console.log(err);
-    }
-    console.log('Server OK');
-});
+    if (err) { return console.log(err);}
+    console.log('Server is OK');
+});0
