@@ -5,6 +5,7 @@ const BookSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+      unique: true,
     },
     description: {
       type: String,
@@ -16,7 +17,6 @@ const BookSchema = new mongoose.Schema(
     },
     pageCount: {
       type: Number,
-      //default: 0,
     },
     author: {
         type: String,
@@ -25,6 +25,10 @@ const BookSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: true
+    },
+    count: {
+      type: Number,
+      default: 100
     },
     /*user: {
       type: mongoose.Schema.Types.ObjectId,

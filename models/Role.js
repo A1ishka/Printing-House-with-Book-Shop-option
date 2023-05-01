@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const RoleSchema = new mongoose.Schema(
+const RoleModel = new mongoose.Schema(
 {
     value: 
     {
@@ -11,4 +11,4 @@ const RoleSchema = new mongoose.Schema(
 });
 
 
-export default mongoose.model('Role', RoleSchema);
+export default mongoose.model('Role', RoleModel);

@@ -14,7 +14,7 @@ export const registerValidation = [
 
 export const bookCreateValidation = [
   body('name', 'Введите название книги').isLength({ min: 3 }).isString(),
-  body('discription', 'Введите текст статьи').isLength({ min: 3 }).isString(),
+  body('description', 'Введите текст статьи').isLength({ min: 3 }).isString(),
   body('tags', 'Неверный формат тэгов').optional().isString(),
   body('pageCount', 'Число страниц не может быть меньше нуля').isNumeric(),
   body('price', 'Цена не может быть меньше нуля').isNumeric(),

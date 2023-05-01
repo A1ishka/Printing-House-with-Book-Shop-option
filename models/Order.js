@@ -1,27 +1,48 @@
 import mongoose from 'mongoose';
+import PreOrderSchema from './PreOrder.js'
 
-const OrderSchema = new Schema({
-	products: [
-		{
-			product: {
-				type: Object,
-				required: true
-			},
-			quantity: {
-				type: Number,
-				required: true
-			}
-		}
-	],
+const OrderSchema = new mongoose.Schema({
+	preOrder:[{    
+    type: mongoose.Schema.Types.ObjectId,
+		ref: "PreOrder",
+		required: true,
+  }],
 	user: {
-		name: { type: String, required: true },
+		orderName: { type: String, required: true },
 		userId: {
-			//type: Schema.Types.ObjectId, если производить помодульное подключение
             type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
-			required: true
+			required: true,
 		}
-	}
-});
+	},
+  status: {
+    type: String,
+    default: "Формируется.."
+  }
+	},
+	{
+    timestamps: true,
+  	},
+  );
+
+/*
+  OrderSchema.methods.addToOrder = function(){
+    async (req, res) => {
+	try {
+    let findOrder = this.Order;
+	//const findOrder = await OrderSchema.findById(req.Order);
+	const findPreOrder = await PreOrderSchema.findById(req.body.order); 
+    const doc = findOrder.order.items.push({order: findPreOrder});
+
+    const addToOrder = await doc.save();
+	res.json(addToOrder);
+} catch (err) {
+	console.log(err);
+    res.status(500).json({
+      message: 'Не удалось добавить в заказ',
+    });
+}
+}
+}*/
 
 export default mongoose.model("Order", OrderSchema);

@@ -2,14 +2,13 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { validationResult } from 'express-validator';
 import UserModel from '../models/User.js';
-import RoleSchema from '../models/Role.js';
-import * as RoleMode from './RoleController.js'; //добавлять, где нужен доступ определенных ролей
+import RoleModel from '../models/Role.js';
 
 export const register = async (req, res) => {
   try {
 
-  /*const userRole = new RoleSchema();
-  const adminRole = new RoleSchema({value:"ADMIN"})
+  /*const userRole = new RoleModel();
+  const adminRole = new RoleModel({value:"ADMIN"})
   await userRole.save()
   await adminRole.save()
   res.json('added')*/
@@ -17,7 +16,7 @@ export const register = async (req, res) => {
     const password = req.body.password;
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
-    const userRole = await RoleSchema.findOne({value: "USER"});
+    const userRole = await RoleModel.findOne({value: "USER"});
 
 
     const doc = new UserModel({
