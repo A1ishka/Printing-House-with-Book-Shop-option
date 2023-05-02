@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Page</title>
+</head>
+<body>
+    <h1>Register</h1>
+    
+    <form method="POST" action="/auth/register">
+        <label for="FIO">FIO:</label>
+        <input type="text" id="FIO" name="FIO"><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email"><br>
+        <input type="submit" value="Register">
+    </form>
+    
+    <script>
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (event) => {
+            const FIO = document.querySelector('#FIO').value;
+            const password = document.querySelector('#password').value;
+            const email = document.querySelector('#email').value;
+            
+            if (!FIO || !password || !email) {
+                event.preventDefault();
+                alert('Please fill out all fields.');
+            }
+        });
+    </script>
+</body>
+</html>
