@@ -120,9 +120,20 @@ export const addToOrder =  async (req, res) => {
 	try {
     const findOrder = await OrderSchema.findById(req.body.order);
 	const findPreOrder = await PreOrderSchema.findById(req.body.preOrder); 
+	
+	let isEqual = true;
+	console.log(findPreOrder._id);
+	findOrder.preOrder.forEach ((element) => {
+
+	if (JSON.stringify(element._id) === JSON.stringify(findPreOrder._id)) {
+		isEqual = false;
+		res.json({message: 'Уже добавлено. Проверьте содержимое корзины'});
+	}console.log(isEqual);});
+
+	if (isEqual == true) {
     findOrder.preOrder.push(findPreOrder);
     findOrder.save();
-	res.json({findOrder});
+	res.json({findOrder}); }
 } catch (err) {
 	console.log(err);
     res.status(500).json({ message: 'Не удалось обновить заказ',});
