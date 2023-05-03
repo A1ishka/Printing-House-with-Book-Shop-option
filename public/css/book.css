@@ -1,0 +1,82 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.book-image {
+    flex: 0 0 30%;
+    margin-right: 50px;
+}
+
+.book-image img {
+    width: 100%;
+}
+
+.book-details {
+    flex: 0 0 60%;
+}
+
+.book-details h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.author {
+    font-size: 1.2rem;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.description {
+    margin-bottom: 20px;
+}
+
+.tags {
+    margin-bottom: 20px;
+}
+
+.tags strong {
+    font-weight: bold;
+}
+
+.page-count {
+    margin-bottom: 20px;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+}
+
+form label {
+    margin-right: 10px;
+}
+
+form input[type="number"] {
+    width: 50px;
+}
+
+form button {
+    margin-left: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0062cc;
+}
