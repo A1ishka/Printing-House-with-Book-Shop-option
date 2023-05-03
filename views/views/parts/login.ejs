@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form method="POST" action="/auth/login">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email"><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"><br>
+        <input type="submit" value="Login">
+    </form>
+    
+    <script>
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (event) => {
+            const password = document.querySelector('#password').value;
+            const email = document.querySelector('#email').value;
+            console.log('//////////////////////////');
+            console.log(email, password);
+            console.log('||||||||||||||||||||||||||');
+
+            if (!password || !email) {
+                event.preventDefault();
+                alert('Please fill out all fields.');
+            }
+
+            const formData = {
+                password: password,
+                email: email
+            };
+  
+            fetch('/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData) })
+            .then(response => {
+            if (response.ok) { return response.text();
+            } else { return Promise.reject(response); }})
+
+            if ("Notification" in window) { Notification.requestPermission().then(function(permission) {
+                if (permission === "granted") { new Notification("Successful!"); }})}
+        });
+    </script>
+</body>
+</html>
