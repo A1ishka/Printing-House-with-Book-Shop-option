@@ -1,4 +1,4 @@
-import BookSchema from '../models/Book.js';
+import BookSchema from '../models/Book.js'; //bootстрап для выпадающего списка при создании заказа
 
 export const getLastTags = async (req, res) => {
   try {
@@ -26,7 +26,8 @@ export const getLastTags = async (req, res) => {
 export const getAll = async (req, res) => {
   try {
     const books = await BookSchema.find().exec();
-    res.json(books);
+    //res.json(books); 
+    res.render('book-cards', { books });
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -50,14 +51,14 @@ export const getBookByName = async (req, res) => {
 
 export const getOne = async (req, res) => {
   try {
-    const findBook = await BookSchema.findOne({ _id: req.params.id });
-    if (!findBook) {
+    const book = await BookSchema.findOne({ _id: req.params.id });
+    if (!book) {
       return res.status(404).json({
         message: 'book не найден',
       });
     
     }
-    res.json(findBook);
+    res.render('book-card', { book });
   } catch (err) {
     console.log(err);
     res.status(500).json({
