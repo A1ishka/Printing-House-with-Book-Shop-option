@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BookSHOP</title>
+    
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <%- include('parts/header.ejs') %>
+    <div class="book-cards">
+        <% books.forEach(book => { %>
+            <div class="book-card">
+                <div class="book-image">
+                    <img src="<%= book.imageUrl %>" alt="<%= book.name %>">
+                </div>
+                <div class="book-details">
+                    <p><%= book.description %></p>
+                    <p>Tags: <%= book.tags.join(', ') %></p>
+                    <p>Page count: <%= book.pageCount %></p>
+                    <p>Author: <%= book.author %></p>
+                    <p>Price: <%= book.price %></p>
+                    <p>Count: <%= book.count %></p>
+                </div>
+            </div>
+        <% }); %>`;       
+    </div> 
+    <%- include('parts/footer.ejs') %>
+</body>
+</html>
