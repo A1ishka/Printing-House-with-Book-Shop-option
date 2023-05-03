@@ -6,10 +6,11 @@
 </head>
 <body>
     <h1>Register</h1>
-    
+    <!--форму оформить по центру в милом контейнере
+    //внизу сделать две ссылки: вход и главная-->
     <form method="POST" action="/auth/register">
-        <label for="FIO">FIO:</label>
-        <input type="text" id="FIO" name="FIO"><br>
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName"><br>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password"><br>
         <label for="email">Email:</label>
@@ -18,17 +19,45 @@
     </form>
     
     <script>
+    function postform() {
         const form = document.querySelector('form');
         form.addEventListener('submit', (event) => {
-            const FIO = document.querySelector('#FIO').value;
+            const fullName = document.querySelector('#fullName').value;
             const password = document.querySelector('#password').value;
             const email = document.querySelector('#email').value;
             
-            if (!FIO || !password || !email) {
+            if (!fullName || !password || !email) {
                 event.preventDefault();
                 alert('Please fill out all fields.');
+                return;
             }
+            
+            const formData = {
+                fullName: fullName,
+                password: password,
+                email: email
+            };
+  
+            fetch('/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData) })
+            .then(response => {
+            if (response.ok) { return response.text();
+            } else { return Promise.reject(response); }})
+            .then(jwtToken => {
+            const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
+            document.cookie = 'jwtToken=' + jwtToken + '; path=/; expires=' + expiryDate.toUTCString() + '; SameSite=Lax; Secure'; })
+            .catch(error => { alert(error.statusText); });
+            
+            if ("Notification" in window) { Notification.requestPermission().then(function(permission) {
+                if (permission === "granted") { new Notification("Registration Successful!\nYou can go to the main page"); }})}
+            // отменяем стандартное поведение формы
+            event.preventDefault();
         });
+    };
+          
+    postform();
     </script>
 </body>
 </html>
