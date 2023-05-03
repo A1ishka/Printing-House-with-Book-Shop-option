@@ -29,7 +29,7 @@ export const register = async (req, res) => {
 
     const user = await doc.save();
 
-    const token = jwt.sign(
+    const jwtToken = jwt.sign(
       {
         _id: user._id,
       },
@@ -39,12 +39,17 @@ export const register = async (req, res) => {
       },
     );
 
+    const options = {
+      maxAge: 7 * 24 * 60 * 60 * 1000, // срок действия токена - 7 дней
+      httpOnly: true, // cookie-файл доступен только для сервера
+      sameSite: 'strict', // cookie-файл отправляется только на сайт, откуда он был установлен
+      secure: true // cookie-файл отправляется только через HTTPS соединение
+    };
+    res.cookie('jwtToken', jwtToken, options);
     const { passwordHash, ...userData } = user._doc;
+    res.json({ ...userData, jwtToken, });
+    //res.render('./index.ejs');
 
-    res.json({
-      ...userData,
-      token,
-    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -55,8 +60,8 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const user = await UserModel.findOne({ email: req.body.email });
-
+    const user = await UserModel.findOne({ email: req.body.email }); //аналогичная ситуация с регистрацией, но здесь не считывает
+    console.log(req.body.email, user);
     if (!user) {
       return res.status(404).json({
         message: 'Пользователь не найден',
@@ -71,7 +76,7 @@ export const login = async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
+    const jwtToken = jwt.sign(
       {
         _id: user._id,
       },
@@ -85,7 +90,7 @@ export const login = async (req, res) => {
 
     res.json({
       ...userData,
-      token,
+      jwtToken,
     });
   } catch (err) {
     console.log(err);
