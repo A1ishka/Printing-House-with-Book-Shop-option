@@ -19,8 +19,16 @@ mongoose
 .catch((err)=> console.log('DB error', err));
 
 const app = express();
+app.use(express.static('public'));
 app.use(express.json());
-app.get('/', (req, res) => { res.send('Hello'); });
+app.set('view engine', 'ejs');
+
+app.get('/', (req, res) => { res.render('./index.ejs'); });
+
+app.get('/auth/register', (req, res) => { res.render('./parts/registration.ejs'); });
+app.get('/auth/login', (req, res) => { res.render('./login.ejs'); });
+app.get('/about', (req, res) => { res.render('./about.ejs'); }); //о компании
+app.get('/auth/me', (req, res) => { res.render('./cart.ejs'); }); //корзина
 
 app.post('/auth/login', UserController.login);
 app.post('/auth/register', Validations.registerValidation, UserController.register);
@@ -40,7 +48,7 @@ app.patch(
   handleValidationErrors, BookController.update,
 );
 
-app.post('/pre-order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.createPreOrder);
+app.post('/pre-order', /*checkAuth, RoleController.isUser(['USER', 'ADMIN']),*/ PreOrderController.createPreOrder);
 app.patch('/pre-order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.updatePreOrder);
 app.post('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.createOrder);
 app.patch('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.addToOrder);
@@ -56,4 +64,4 @@ app.post('/userrolecheck', checkAuth, RoleController.isUser(['USER', 'ADMIN']), 
 app.listen(5050, (err) =>{
     if (err) { return console.log(err);}
     console.log('Server is OK');
-});0
+});
