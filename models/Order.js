@@ -3,7 +3,7 @@ import PreOrderSchema from './PreOrder.js'
 
 const OrderSchema = new mongoose.Schema({
 	preOrder:[{    
-    type: mongoose.Schema.Types.ObjectId,
+    	type: mongoose.Schema.Types.ObjectId,
 		ref: "PreOrder",
 		required: true,
   }],
