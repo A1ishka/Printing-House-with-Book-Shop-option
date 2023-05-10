@@ -6,11 +6,46 @@
 </head>
 <body>
     <%- include('parts/header.ejs') %>
+
+                <div class="table-part">
+                <div class="gr-text">
+                    <h1>Welcome to my website!</h1>
+                    <p>This is the main page of my website.</p>
+                    <p>Here are some links to other pages:</p>
+                </div>
+          
+                <div class="table-part">
+                <div class="slideshow-container">
+                    <div class="mySlides fade">
+                        <img src="../images/card4.jpg" style="width:100%" alt="Что-то пошло не так"> <!--просто подобрать нормальных картинок-->
+                    </div>
+                    <div class="mySlides fade">
+                        <img src="../images/card2.jpg" style="width:100%" alt="Что-то пошло не так">
+                    </div>
+                    <div class="mySlides fade">
+                        <img src="../images/card3.jpg" style="width:100%" alt="Что-то пошло не так">
+                    </div>
+                </div>
+                </div>
+           
+        
     
-    <h1>Welcome to my website!</h1>
-    <p>This is the main page of my website.</p>
-    <p>Here are some links to other pages:</p>
-    <!--<main>aaa</main>-->
     <%- include('parts/footer.ejs') %>
+
+    <script>
+        var slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none"; }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}
+            slides[slideIndex-1].style.display = "block";
+            setTimeout(showSlides, 10000);
+        }
+    </script>
 </body>
 </html>

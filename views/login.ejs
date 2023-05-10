@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="../css/reg_login.css">
+</head>
+<body>
+    <h1>Log in</h1>
+    <form class="form-signin" role="form" method="POST" action="/auth/login">
+        <input type="email" id="email" name="email" class="form-control" placeholder="Email@mail.com" required autofocus><br>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required><br>
+        <input type="submit" value="Log in" class="button-69" role="button">
+    </form>
+    
+    <p class="and-line">and</p>
+    <div class = "back-btn"> <a href="/"><input type="button" class="button-70" role="button" value="Back to the main page"></a></div>
+
+    <script>
+    function postform() {
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (event) => {
+            const password = document.querySelector('#password').value;
+            const email = document.querySelector('#email').value;
+            console.log('//////////////////////////');
+            console.log(email, password);
+            console.log('||||||||||||||||||||||||||');
+
+            if (!password || !email) {
+                event.preventDefault();
+                alert('Please fill out all fields.');
+            }
+
+            const formData = {
+                password: password,
+                email: email
+            };
+  
+            fetch('/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData) })
+            .then(response => {
+            if (response.ok) { return response.text();
+            } else { return Promise.reject(response); }})
+            .catch(error => { alert(error.statusText); });
+
+            if ("Notification" in window) { Notification.requestPermission().then(function(permission) {
+            if (permission === "granted") { new Notification("Successful!"); }})}
+        });
+    }
+    postform();
+    </script>
+    
+    <!--<%- include('parts/footer.ejs') %> -->
+</body>
+</html>
