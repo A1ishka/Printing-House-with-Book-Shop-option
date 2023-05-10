@@ -13,10 +13,6 @@ export const isAdmin = function(roles){
 
       let hasRole = false;
 
-      /*console.log(user.role);
-      console.log(roles); //просто проверочки :)
-      console.log(hasRole);*/
-
       if (user.role == roles[1]) hasRole = true;
       if (!hasRole){ return res.status(405).json({message:'Доступ не разрешен'})}
       next();
@@ -28,7 +24,7 @@ export const isAdmin = function(roles){
       });
     }
   }
-}
+};
 
 export const isUser = function(roles){
     return async function(req, res, next){
@@ -53,4 +49,4 @@ export const isUser = function(roles){
       });
     }
   }
-}
+};

@@ -3,17 +3,18 @@ import PreOrderSchema from '../models/PreOrder.js';
 
 export const createPreOrder = async (req, res) => {
 	try {
-	const findBook = await BookSchema.findById(req.body.bookId); 
-    const doc = new PreOrderSchema({
-		    bookId: findBook,
-        bookName: findBook.name,
-        bookPrice: findBook.price,
+	const book = await BookSchema.findById(req.body.bookId); 
+  console.log(book);
+  const doc = new PreOrderSchema({
+		    bookId: book,
+        bookName: book.name,
+        bookPrice: book.price,
       	quantity: req.body.quantity 
     });
 
-    if (findBook.count >= doc.quantity) 
-    { findBook.count -= doc.quantity;
-      await findBook.save(); }
+    if (book.count >= doc.quantity) 
+    { book.count -= doc.quantity;
+      await book.save(); }
     const newPreOrder = await doc.save();
 	res.json(newPreOrder);
 } catch (err) {
