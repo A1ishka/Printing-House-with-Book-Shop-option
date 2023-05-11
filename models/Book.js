@@ -24,13 +24,16 @@ const BookSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: true
+      required: true,
     },
     count: {
       type: Number,
-      default: 100
+      default: 100,
     },
-    imageUrl: String,
+    imageUrl: {
+      type: String,
+      default: "../images/book.png"
+    },
   },
   {
     timestamps: true,
