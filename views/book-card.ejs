@@ -6,6 +6,12 @@
 </head>
 <body>    
     <%- include('parts/header.ejs') %>
+    <main>
+
+    <script>
+        ///получить айдишник книги и по нему выводить
+    </script>
+
     <div class="book-card">
         <div class="book-image">
             <img src="<%= book.imageUrl %>" alt="<%= book.name %> cover">
@@ -19,12 +25,59 @@
             <p class="price"><strong>Price:</strong> $<%= book.price.toFixed(2) %></p>
             <form action="/pre-order" method="post">
                 <input type="hidden" name="bookId" value="<%= book._id %>">
-                <label for="count">Quantity:</label>
-                <input type="number" name="count" id="count" value="1" min="1">
-                <button type="submit">Add to Cart</button>
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="quantity" id="quantity" value="1" min="1">
+                <button type="submit">Add to Cart</button> <!--на обработчик навешиваем "создать предзаказ"
+                потом записываем в документ этот предзаказ и сразу же генерируем заказ
+                при дополнительном добавлении продуктов также генерируем предзаказ + добавление в уже имеющийся заказ
+            
+                то есть обработчик этой кнопки создает предзаказ и проверяет, был ли уже заказ (если не было, создаем, иначе добавляем)-->
             </form>
         </div>
     </div>
+    <script> 
+        function addToCart(){
+
+            const form = document.querySelector('form');
+            form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const bookId = document.querySelector('#bookId').value;
+            const quantity = document.querySelector('#quantity').value;
+
+            const formData = {
+                bookId: bookId,
+                quantity: quantity,
+            };
+
+            var user;
+            accessToken = document.cookie;
+            console.log(accessToken);
+            fetch('/pre-order', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData) })
+            .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+            throw new Error('Failed to fetch user data');
+            }
+            })
+            .then(data => { ////////////////////////////вот здесь нужно получить заказы
+                console.log(data);
+                //user = data;
+            })
+            .catch(error => {
+            console.error(error);
+            });
+        },
+    )};
+    //addToCart();  //////////////////////////////////дофигачить именно кнопку!!!!!!!!!!!!!!
+    </script>
+    </main>
     <%- include('parts/footer.ejs') %>
 </body>
 </html>

@@ -6,25 +6,26 @@
     <link rel="stylesheet" href="../css/reg_login.css">
 </head>
 <body>
-    <h1>Log in</h1>
+    <div class="icon-img"><img src="../images/user-icon.png" alt="user-icon" width="10%" height="auto"></div>
+    <h1 class="login-h">Вход в аккаунт</h1>
     <form class="form-signin" role="form" method="POST" action="/auth/login">
         <input type="email" id="email" name="email" class="form-control" placeholder="Email@mail.com" required autofocus><br>
         <input type="password" id="password" name="password" class="form-control" placeholder="Password" required><br>
-        <input type="submit" value="Log in" class="button-69" role="button">
+        <div class = "subm-btn"><input type="submit" value="Login" class="button-69" role="button"></div>
     </form>
-    
     <p class="and-line">and</p>
     <div class = "back-btn"> <a href="/"><input type="button" class="button-70" role="button" value="Back to the main page"></a></div>
 
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
     function postform() {
         const form = document.querySelector('form');
         form.addEventListener('submit', (event) => {
+            event.preventDefault();
             const password = document.querySelector('#password').value;
             const email = document.querySelector('#email').value;
-            console.log('//////////////////////////');
-            console.log(email, password);
-            console.log('||||||||||||||||||||||||||');
+            
 
             if (!password || !email) {
                 event.preventDefault();
@@ -32,24 +33,52 @@
             }
 
             const formData = {
+                email: email,
                 password: password,
-                email: email
             };
   
-            fetch('/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData) })
+            axios.post('/auth/login', formData, {
+            headers: { 'Content-Type': 'application/json' },})
             .then(response => {
-            if (response.ok) { return response.text();
-            } else { return Promise.reject(response); }})
-            .catch(error => { alert(error.statusText); });
+                console.log(response.data);})
+            .catch(error => {
+                console.log(error); });
+
+            
+           /*try{
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/auth/login');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+            if (xhr.status === 200) {
+                console.log(xhr);
+            } else {
+                console.log('Request failed.  Returned status of ' + xhr.status); }
+            };
+                xhr.send(JSON.stringify(formData));
+            } catch(err){console.log(err)}*/
+
+            console.log(JSON.stringify(formData));
 
             if ("Notification" in window) { Notification.requestPermission().then(function(permission) {
             if (permission === "granted") { new Notification("Successful!"); }})}
         });
     }
     postform();
+    function getJwtToken() {
+        const name = 'jwtToken=';
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const cookieArray = decodedCookie.split(';');
+
+        for (let i = 0; i < cookieArray.length; i++) {
+            let cookie = cookieArray[i];
+            while (cookie.charAt(0) === ' ') { cookie = cookie.substring(1); }
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length); }}
+                return null; 
+    };
+    const jwtToken = getJwtToken();
+    document.cookie = 'jwtToken=' + jwtToken + '; path=/; expires=' + expiryDate.toUTCString() + '; SameSite=Lax; Secure'; 
     </script>
     
     <!--<%- include('parts/footer.ejs') %> -->

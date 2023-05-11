@@ -9,7 +9,7 @@
     <%- include('parts/header.ejs') %>
     <div class="book-cards">
         <% books.forEach(book => { %>
-            <div class="book-card">
+            <div class="book-card" id="<%= book._id %>" onclick="onClickDiv('<%= book._id %>')">
                 <div class="book-image">
                     <img src="<%= book.imageUrl %>" alt="<%= book.name %>">
                 </div>
@@ -19,11 +19,39 @@
                     <p>Page count: <%= book.pageCount %></p>
                     <p>Author: <%= book.author %></p>
                     <p>Price: <%= book.price %></p>
-                    <p>Count: <%= book.count %></p>
+                    <p>Count: <%= book.count %></p> 
                 </div>
             </div>
         <% }); %>      
     </div> 
+    <script>
+        function onClickDiv(bookId){
+            const idData = {
+                bookId: bookId,
+            };
+
+            fetch('/pre-order', {
+            method: 'POST', ////////получить страницу, поэтому скорее всего гет
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(idData) })
+            .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+            throw new Error('Failed to fetch user data');
+            }
+            })
+            .then(data => { ////////////////////////////скорее всего это можно делитнуть
+                console.log(data);
+            })
+            .catch(error => {
+            console.error(error);
+            });
+        }
+    </script>
+
     <%- include('parts/footer.ejs') %>
 </body>
 </html>
