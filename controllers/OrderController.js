@@ -93,10 +93,23 @@ import UserModel from '../models/User.js';
 import PreOrderSchema from '../models/PreOrder.js';
 import OrderSchema from '../models/Order.js';
 
+
+export const isOrderCreated = async (req, res) => {	
+	const findOrder = await OrderSchema.findOne({ userId: req.params.userId });
+	if (!findOrder || findOrder.status != "Формируется..") createOrder();
+	else addToOrder();
+};
+
+export const showOrder = async (req, res) => {
+//получаем в фронте???<!--findById(user.userId : user._id)-->
+
+const findOrder = await OrderSchema.findOne({ userId: req.params.id });//????
+};
+
 export const createOrder = async (req, res) => {
 	try {
 	const findUser = await UserModel.findById(req.userId);
-	const findPreOrder = await PreOrderSchema.findById(req.body.preOrder); 
+	const findPreOrder = await PreOrderSchema.findById(req.body._id); 
     let PreOrder = []
     PreOrder.push(findPreOrder);
     const doc = new OrderSchema({
@@ -119,7 +132,7 @@ export const createOrder = async (req, res) => {
 export const addToOrder =  async (req, res) => {
 	try {
     const findOrder = await OrderSchema.findById(req.body.order);
-	const findPreOrder = await PreOrderSchema.findById(req.body.preOrder); 
+	const findPreOrder = await PreOrderSchema.findById(req.body._id); 
 	
 	let isEqual = true;
 	console.log(findPreOrder._id);
@@ -140,7 +153,7 @@ export const addToOrder =  async (req, res) => {
 	}
 };
 
-export const removeFromOrder =  async (req, res) => {
+export const removeFromOrder =  async (req, res) => { //обработчик кнопки "убрать из заказа" + проверка (если это был единственный предзаказ в заказе...)
 	try {
     const findOrder = await OrderSchema.findById(req.body.order);
 	const findPreOrder = await PreOrderSchema.findById(req.body.preOrder); 
@@ -153,7 +166,7 @@ export const removeFromOrder =  async (req, res) => {
 	}
 };
 
-export const changeStatus =  async (req, res) => {
+export const changeStatus =  async (req, res) => { //кнопка оплаты
 	try {
     const findOrder = await OrderSchema.findById(req.body.orderId);
 	if (findOrder.status == "К оплате") findOrder.status = "Оплачено";
