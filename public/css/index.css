@@ -204,19 +204,21 @@ footer {
     transform: scale(1.2);
   }
 
- /* .fa-facebook {
-
+  .fa-facebook {
+background-image: "../images/face.png";
   }
 
   .fa-twitter {
 
+    background-image: "../images/twitter.png";
   }
 
-  .fa-instagram {
+  .fa-vk {
 
+    background-image: "../images/vk.png";
   }
 
   .fa-youtube {
 
-  } */
-
+    background-image: "../images/youtube.png";
+  } 

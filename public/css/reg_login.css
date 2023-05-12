@@ -1,13 +1,18 @@
 body {
     padding-top: 40px;
     padding-bottom: 40px;
-    background-color: honeydew;
+    background-color: rgb(255, 240, 252);
   }
 
-h1{
-  padding-left: 41.5%;
+.login-h  {
+  padding-left: 38%;
 }
-
+.reg-h{
+  padding-left: 37%;
+}
+.icon-img{
+  padding-left: 43%;
+}
 .back-btn{
   padding-left: 39.5%;
   
