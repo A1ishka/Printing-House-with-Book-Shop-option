@@ -9,14 +9,15 @@
     <%- include('parts/header.ejs') %>
     <div class="book-cards">
         <% books.forEach(book => { %>
-            <div class="book-card" id="<%= book._id %>" onclick="onClickDiv('<%= book._id %>')">
+            <div class="book-card" id="<%= book._id %>" >
+                <a href="/books/<%= book._id %>">
                 <div class="book-image">
                     <img src="<%= book.imageUrl %>" alt="<%= book.name %>">
-                </div>
+                </div></a>
                 <div class="book-details">
-                    <p><%= book.description %></p>
+                    <!--<p><%= book.description %></p>
                     <p>Tags: <%= book.tags.join(', ') %></p>
-                    <p>Page count: <%= book.pageCount %></p>
+                    <p>Page count: <%= book.pageCount %></p>-->
                     <p>Author: <%= book.author %></p>
                     <p>Price: <%= book.price %></p>
                     <p>Count: <%= book.count %></p> 
@@ -25,13 +26,13 @@
         <% }); %>      
     </div> 
     <script>
-        function onClickDiv(bookId){
+        /*function onClickDiv(bookId){
             const idData = {
                 bookId: bookId,
             };
 
-            fetch('/pre-order', {
-            method: 'POST', ////////получить страницу, поэтому скорее всего гет
+            fetch('/book/bookId', {
+            method: 'GET', 
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -43,13 +44,10 @@
             throw new Error('Failed to fetch user data');
             }
             })
-            .then(data => { ////////////////////////////скорее всего это можно делитнуть
-                console.log(data);
-            })
             .catch(error => {
             console.error(error);
             });
-        }
+        }*/
     </script>
 
     <%- include('parts/footer.ejs') %>

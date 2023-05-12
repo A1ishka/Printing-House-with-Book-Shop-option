@@ -3,37 +3,36 @@
 <head>
     <title><%= book.name %></title>
     <link rel="stylesheet" href="/css/book.css">
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>    
     <%- include('parts/header.ejs') %>
     <main>
-
-    <script>
-        ///получить айдишник книги и по нему выводить
-    </script>
-
-    <div class="book-card">
+    <div class="book-align">
+    <div class="book-one-card">
+        <table><tr><td>
         <div class="book-image">
             <img src="<%= book.imageUrl %>" alt="<%= book.name %> cover">
-        </div>
-        <div class="book-details">
+        </div></td>
+        <td><div class="one-book-details">
             <h1><%= book.name %></h1>
-            <p class="author">By <%= book.author %></p>
+            <p class="author">Автор - <%= book.author %></p>
             <p class="description"><%= book.description %></p>
-            <p class="tags"><strong>Tags:</strong> <%= book.tags.join(', ') %></p>
-            <p class="page-count"><strong>Page count:</strong> <%= book.pageCount %></p>
-            <p class="price"><strong>Price:</strong> $<%= book.price.toFixed(2) %></p>
+            <p class="tags"><strong>Жанр:</strong> <%= book.tags.join(', ') %></p>
+            <p class="page-count"><strong>Количество страниц:</strong> <%= book.pageCount %></p>
+            <p class="price"><strong>Цена/шт:</strong> $<%= book.price.toFixed(2) %></p>
             <form action="/pre-order" method="post">
                 <input type="hidden" name="bookId" value="<%= book._id %>">
-                <label for="quantity">Quantity:</label>
-                <input type="number" name="quantity" id="quantity" value="1" min="1">
-                <button type="submit">Add to Cart</button> <!--на обработчик навешиваем "создать предзаказ"
+                <h3><label for="quantity">Количество:</label></h3>
+                <input type="number" name="quantity" id="quantity" value="1" min="1" max="300">
+                <button type="submit">Добавить в корзину</button> <!--на обработчик навешиваем "создать предзаказ"
                 потом записываем в документ этот предзаказ и сразу же генерируем заказ
                 при дополнительном добавлении продуктов также генерируем предзаказ + добавление в уже имеющийся заказ
             
                 то есть обработчик этой кнопки создает предзаказ и проверяет, был ли уже заказ (если не было, создаем, иначе добавляем)-->
             </form>
         </div>
+        </td></tr></table></div>
     </div>
     <script> 
         function addToCart(){
