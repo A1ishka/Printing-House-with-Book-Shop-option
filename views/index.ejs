@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>BookSHOP</title>
+    <title>Главная</title>
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
     <%- include('parts/header.ejs') %>
-
-                <div class="table-part">
-                <div class="gr-text">
-                    <h1>Welcome to my website!</h1>
-                    <p>This is the main page of my website.</p>
-                    <p>Here are some links to other pages:</p>
-                </div>
+    <main>
+        <div class="gr-text">
+            <h1>Книжное издательство</h1>
+            <p>Мы отличаемся от других высоким уровнем специализации на одной книжной серии, уделяя огромное внимание мельчайшим деталям.</p>
+            <p>Поддерживаем начинающих авторов, поэтому совершенно недорого осуществляем их мечты в своей типографии</p>
+        </div>
+        <!--написать адекватный текст и переставить на другие картинки в слайд-шоу-->
           
-                <div class="table-part">
-                <div class="slideshow-container">
-                    <div class="mySlides fade">
-                        <img src="../images/card4.jpg" style="width:100%" alt="Что-то пошло не так"> <!--просто подобрать нормальных картинок-->
-                    </div>
-                    <div class="mySlides fade">
-                        <img src="../images/card2.jpg" style="width:100%" alt="Что-то пошло не так">
-                    </div>
-                    <div class="mySlides fade">
-                        <img src="../images/card3.jpg" style="width:100%" alt="Что-то пошло не так">
-                    </div>
+            <div class="slideshow-container">
+                <div class="mySlides fade">
+                    <img src="../images/card4.jpg" style="width:100%" alt="Что-то пошло не так"> <!--просто подобрать нормальных картинок-->
                 </div>
+                <div class="mySlides fade">
+                    <img src="../images/card2.jpg" style="width:100%" alt="Что-то пошло не так">
                 </div>
+                <div class="mySlides fade">
+                    <img src="../images/card3.jpg" style="width:100%" alt="Что-то пошло не так">
+                </div>
+            </div>
+
+            <div class="space"></div>
+        </main>
            
-        
+
     
     <%- include('parts/footer.ejs') %>
 
