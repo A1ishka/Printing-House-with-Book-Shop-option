@@ -153,11 +153,24 @@ footer {
     padding: 20px 10px;
   }
 
+  ._footer_ {
+    align-items: center;
+    margin-top: .2em;
+    margin-bottom: .2em;
+  }
+
+ .footer_links{
+  margin-left: 30em;
+}
+
+  .col-footer_links{
+    margin-left: 35em;
+  }
   .social-media {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0;
+    margin-left: 4.5em;
     padding: 0;
   }
 
@@ -203,22 +216,3 @@ footer {
   .contact-info li a:hover {
     transform: scale(1.2);
   }
-
-  .fa-facebook {
-background-image: "../images/face.png";
-  }
-
-  .fa-twitter {
-
-    background-image: "../images/twitter.png";
-  }
-
-  .fa-vk {
-
-    background-image: "../images/vk.png";
-  }
-
-  .fa-youtube {
-
-    background-image: "../images/youtube.png";
-  } 
