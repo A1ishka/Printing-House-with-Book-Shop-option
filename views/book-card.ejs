@@ -11,16 +11,16 @@
     <div class="book-align">
     <div class="book-one-card">
         <table><tr><td>
-        <div class="book-image">
+        <div class="one-book-image">
             <img src="<%= book.imageUrl %>" alt="<%= book.name %> cover">
         </div></td>
         <td><div class="one-book-details">
             <h1><%= book.name %></h1>
             <p class="author">Автор - <%= book.author %></p>
             <p class="description"><%= book.description %></p>
-            <p class="tags"><strong>Жанр:</strong> <%= book.tags.join(', ') %></p>
+            <p class="tags"><strong>Тэги:</strong> <%= book.tags.join(', ') %></p>
             <p class="page-count"><strong>Количество страниц:</strong> <%= book.pageCount %></p>
-            <p class="price"><strong>Цена/шт:</strong> $<%= book.price.toFixed(2) %></p>
+            <p class="price"><strong>Цена/шт:</strong> <%= book.price.toFixed(2) %> BYN</p>
             <form action="/pre-order" method="post">
                 <input type="hidden" name="bookId" value="<%= book._id %>">
                 <h3><label for="quantity">Количество:</label></h3>
