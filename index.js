@@ -30,7 +30,7 @@ app.get('/auth/login', (req, res) => { res.render('./login.ejs'); });
 app.get('/about', (req, res) => { res.render('./about.ejs'); }); //о компании
 app.get('/auth/me', (req, res) => { res.render('./cart.ejs'); }); //корзина
 
-app.get('/books/:id', (req, res) => { res.render('./book-card.ejs'); });
+//app.get('/books/:id', (req, res) => { res.render('./book-card.ejs'); });
 
 app.post('/auth/login', UserController.login);
 app.post('/auth/register', Validations.registerValidation, UserController.register);
@@ -41,8 +41,8 @@ app.get('/tags', BookController.getLastTags);
 app.get('/books', BookController.getAll);
 app.get('/book-by-name', BookController.getBookByName);
 app.get('/books/tags', BookController.getLastTags);
-//app.get('/books/:id', BookController.getOne);
-app.post('/books', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), handleValidationErrors, BookController.create);
+app.get('/books/:id', BookController.getOne); ////////////////////////this one
+app.post('/books', /*checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), handleValidationErrors,*/ BookController.create);
 app.delete('/books/:id', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), BookController.remove);
 app.patch(
   '/books/:id',
