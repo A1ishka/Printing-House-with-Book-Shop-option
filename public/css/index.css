@@ -11,6 +11,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 3em;
 }
 
 .navbar__logo {
@@ -164,17 +165,18 @@ p {
 footer {
     background-color: #333;
     color: #fff;
-    padding: 20px 10px;
+    padding: 2em 1em;
   }
 
   ._footer_ {
     align-items: center;
     margin-top: .2em;
     margin-bottom: .2em;
+    margin-left: 2em;
   }
 
  .footer_links{
-  margin-left: 30em;
+  margin-left: 33em;
 }
 
   .col-footer_links{
@@ -184,7 +186,7 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 4.5em;
+    margin-left: 2em;
     padding: 0;
   }
 
@@ -229,4 +231,8 @@ footer {
 
   .contact-info li a:hover {
     transform: scale(1.2);
+  }
+
+  .obl-type{
+    margin-left: 4em;
   }
