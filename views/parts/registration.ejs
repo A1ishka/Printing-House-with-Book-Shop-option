@@ -6,10 +6,9 @@
     <link rel="stylesheet" href="../css/reg_login.css">
 </head>
 <body>
-    <h1>Register</h1>
-    <!--форму оформить по центру в милом контейнере
-    //внизу сделать две ссылки: вход и главная-->
-    
+    <div class="icon-img"><img src="../images/user-icon.png" alt="user-icon" width="10%" height="auto"></div>
+    <h1 class="reg-h">Создание аккаунта</h1>
+
     <form class="form-signin" role="form" method="POST" action="/auth/register">
         <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Full Name" required autofocus><br>
         <input type="password" id="password" name="password" class="form-control" placeholder="Password" required><br>
@@ -53,8 +52,7 @@
             
             if ("Notification" in window) { Notification.requestPermission().then(function(permission) {
                 if (permission === "granted") { new Notification("Registration Successful!\nYou can go to the main page"); }})}
-            // отменяем стандартное поведение формы
-            event.preventDefault();
+            event.preventDefault();  // отменяем стандартное поведение формы
         });
     };
           
