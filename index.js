@@ -29,6 +29,10 @@ app.get('/auth/register', (req, res) => { res.render('./parts/registration.ejs')
 app.get('/auth/login', (req, res) => { res.render('./login.ejs'); });
 app.get('/about', (req, res) => { res.render('./about.ejs'); }); //о компании
 app.get('/auth/me', (req, res) => { res.render('./cart.ejs'); }); //корзина
+app.get('/top-10-belkniga', (req, res) => { res.render('./top-10-belkniga.ejs'); });
+app.get('/print', (req, res) => { res.render('./print.ejs'); });
+app.get('/404', (req, res) => { res.render('./404.ejs'); });
+app.get('/500', (req, res) => { res.render('./500.ejs'); });
 
 //app.get('/books/:id', (req, res) => { res.render('./book-card.ejs'); });
 
