@@ -41,3 +41,50 @@ h3 {
   td{
     min-width: 10em;
   }
+  
+
+
+
+.count-button {
+  background-color: #fff000;
+  border-radius: 1em;
+  color: #000;
+  cursor: pointer;
+  padding: .8em 1.1em;
+  text-align: center;
+  transition: 200ms;
+  width: 20em;
+  box-sizing: border-box;
+  border: 0;
+  font-size: .9em;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.count-button:not(:disabled):hover,
+.count-button:not(:disabled):focus {
+  outline: 0;
+  background: #f4e603;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
+}
+
+.count-button:disabled {
+  filter: saturate(0.2) opacity(0.5);
+  -webkit-filter: saturate(0.2) opacity(0.5);
+  cursor: not-allowed;
+}
+
+.submit-button{
+   @extend .count-button;
+   
+   width: 10em;
+   background-color: rgb(104, 209, 104);
+}
+
+.clear-button{
+    @extend .count-button;
+    
+    width: 10em;
+    background-color: rgb(209, 104, 169);
+ }
