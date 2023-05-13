@@ -12,6 +12,8 @@ import * as BookController from './controllers/BookController.js';
 import * as RoleController from './controllers/RoleController.js';
 import * as PreOrderController from './controllers/PreOrderController.js';
 import * as OrderController from './controllers/OrderController.js';
+import * as TOrderController from './controllers/TOrderController.js';
+
 
 mongoose
 .connect('mongodb+srv://alika:qv8GdxBfWhxHT5YE@cluster0.kpu7dbl.mongodb.net/book?retryWrites=true&w=majority')
@@ -62,6 +64,9 @@ app.delete('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderC
 app.patch('/order-status', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.changeStatus);
 
 app.get('/order/:id', OrderController.getOrderById);
+
+app.post('/t-order', TOrderController.createTOrder);
+app.post('/calculate-price', TOrderController.countCost);
 
 app.post('/adminrolecheck', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), BookController.getAll);
 app.post('/userrolecheck', checkAuth, RoleController.isUser(['USER', 'ADMIN']), BookController.getLastTags);
