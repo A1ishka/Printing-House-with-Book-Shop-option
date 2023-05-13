@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import PreOrderSchema from './PreOrder.js'
 
 const OrderSchema = new mongoose.Schema({
 	preOrder:[{    
