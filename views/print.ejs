@@ -36,7 +36,7 @@
                     <table><tr>
                         <td><br>
                             <div class="container"><label> <p>Бумага:
-                                <select id="image-select" required>
+                                <select id="image_select" name="paper_type" required>
                                     <option selected value="Газетная">Газетная</option>
                                     <option value="Белая_неплотная">Белая, неплотная</option>
                                     <option value="Белая_плотная">Белая, плотная</option>
@@ -50,13 +50,13 @@
                             <label> <br><h3>Обложка</h3>
                                 <table><tr>
                                     <td><fieldset>
-                                        <input type="radio" name = "r_type" value="Мягкая" autofocus> <img src="../images/obl_m.png" alt="Обложка мягкая"><p class="obl-type">Мягкая </p>
+                                        <input type="radio" name = "obl_type" value="Мягкая" autofocus> <img src="../images/obl_m.png" alt="Обложка мягкая"><p class="obl-type">Мягкая </p>
                                     </fieldset></td>
                                     <td><fieldset>
-                                        <input type="radio" name = "r_type" value="Твердая"> <img src="../images/obl_tv.jpg" alt="Обложка твердая"><p class="obl-type">Твердая </p>
+                                        <input type="radio" name = "obl_type" value="Твердая"> <img src="../images/obl_tv.jpg" alt="Обложка твердая"><p class="obl-type">Твердая </p>
                                     </fieldset></td>
                                     <td><fieldset>
-                                        <input type="radio" name = "r_type" value="Кожаная"> <img src="../images/obl_kozha.png" alt="Обложка кожаная"><p class="obl-type">Кожаная </p>
+                                        <input type="radio" name = "obl_type" value="Кожаная"> <img src="../images/obl_kozha.png" alt="Обложка кожаная"><p class="obl-type">Кожаная </p>
                                     </fieldset></td>
                                 </tr></table>
                             </label> 
@@ -76,12 +76,20 @@
                             <input type="file" id="imageInput">
                             <button onclick="loadImage()">Загрузить обложку</button>
                             <br><br><div id="book_obl" class="book_obl"></div>
+
+                            <p>Какой тираж печатаем?</p>
+                            <input type="number" id="count" name="bookCount" min="10" max="10000" value="10">
                         </div>
                     </fieldset>
                 </div>
                 <p align="center">
                     <br><input type="checkbox" id="checked" name="checked" value="Срочная печать"> Срочная печать (готовность в течение месяца)<br>
-                    <br><button class="button-addData" role="button" id = "Submit" onclick="AddData()">Отправить</button>   <button class="button-addData" role="button" id="clearbtn" onclick="deleteTempData()">Отчистить</button>
+                    <br><button id="calculate-btn" onclick="countPrice()" class="count-button" role="button">Рассчитать ориентировочную стоимость стоимость</button>
+                </p>
+                    <div id="total-price" class="total-price"></div>
+                <p align="center"><br>
+                    <button class="count-button submit-button" role="button" id = "Submit" onclick="AddData()">Отправить</button>   
+                    <button class="count-button clear-button" role="button" id="clearbtn" onclick="deleteTempData()">Отчистить</button>
                 </p>
                 
             </form>
@@ -90,7 +98,7 @@
     <%- include('parts/footer.ejs') %>
 
     <script>
-        const selectElement = document.getElementById("image-select");
+        const selectElement = document.getElementById("image_select");
         const imageElement = document.getElementById("selected-image");
 
         selectElement.addEventListener("change", (event) => {
@@ -99,6 +107,30 @@
         imageElement.src = imagePath;
         });
 
+
+        function countPrice(){
+            event.preventDefault();
+            const obl_type = document.querySelector('input[type="radio"][name="obl_type"]:checked').value;
+            const paper_type = document.querySelector('select[name="paper_type"]').value;
+            const pageCount = parseInt(document.querySelector('#bookName').textContent);
+            const bookCount = document.querySelector('input[name="bookCount"]').value;
+
+
+            fetch('/calculate-price', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ obl_type, paper_type, pageCount, bookCount })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const totalPriceElement = document.getElementById('total-price');
+                totalPriceElement.innerHTML = '<p align="center"><br>' + 'Ориентировочная цена составит ' + data.totalPrice + ' BYN.</p>';
+            
+            })
+            .catch(error => res.render('./500.ejs'));
+        };
 
         function uploadFile() {
             event.preventDefault();
@@ -110,9 +142,10 @@
             reader.readAsText(file);
             reader.onload = function() {
                 let fileContent = reader.result;
+                let pageCount = reader.result.length * 35;
                 let firstLine = fileContent.split('\n')[0];
                 console.log(firstLine);
-                bookNameDiv.innerHTML = '<p>' + 'Хорошо, готовим к печати книгу с названием "' + firstLine + '".</p>';
+                bookNameDiv.innerHTML = '<p>' + 'Хорошо, готовим к печати книгу с названием "' + firstLine + '" в ' + pageCount + ' страниц.</p>';
             };
         };
 
@@ -133,11 +166,11 @@
         };
     };
 
-    function validateForm(){
+function validateForm(){
     var name = document.getElementById("name").value;
     var phone = document.getElementById("phone").value;
-    var type = document.getElementById("selecting").value;
-    var radioType = document.querySelector('input[name="r_type"]:checked').value;
+    var type = document.getElementById("image_select").value;
+    var radioType = document.querySelector('input[name="obl_type"]:checked').value;
     var checked = document.getElementById("checked").checked;
 
     if(name == "" || phone == ""){
@@ -149,12 +182,13 @@
     
 function AddData(index){
     event.preventDefault();
-    alert("Заявка добавлена!");
     if (validateForm() == true){
+        alert("Заявка добавлена! Ожидайте звонок от представителя компании");
         var name = document.querySelector("#name").value;
         var phone = document.querySelector("#phone").value;
-        var selecting = document.getElementById("selecting").value;
-        var r_type = document.querySelector('input[name="r_type"]:checked').value;
+        var image_select = document.getElementById("image_select").value;
+        var obl_type = document.querySelector('input[name="obl_type"]:checked').value;
+        var count = document.getElementById("count").value;
         var checked = document.getElementById("checked").checked;
         var dataList;
         if (localStorage.getItem("dataList") == null) {
@@ -165,20 +199,49 @@ function AddData(index){
         dataList.push({
             name: name,
             phone: phone,
-            selecting : selecting,
-            r_type: r_type,
+            image_select : image_select,
+            obl_type: obl_type,
+            count:count,
             checked: checked,
         });
+
+        const formData = {
+            name: name,
+            phone: phone,
+            image_select : image_select,
+            obl_type: obl_type,
+            count: count,
+            checked: checked,
+        };
+
+        fetch('/t-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData) })
+            .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+            throw new Error('Failed to fetch data');
+            }})
+            .catch(error => {
+                res.render('./500.ejs');
+            });
+
         localStorage.setItem("dataList", JSON.stringify(dataList));
         document.querySelector("#name").value = "";
         document.querySelector("#phone").value = "";
-        document.getElementsByName("selecting").value = "";
-        document.getElementsByName("r_type").value = "";
+        document.getElementsByName("image_select").value = "";
+        document.getElementsByName("obl_type").value = "";
+        document.getElementsByName("count").value = "";
         document.getElementsByName("checked").value = "";
 
     }
 }
-function deleteData(index){
+function deleteData(index){    
+    event.preventDefault();
     var dataList;
     if (localStorage.getItem("dataList") == null) {
         dataList = [];
@@ -189,7 +252,8 @@ function deleteData(index){
     localStorage.setItem("dataList", JSON.stringify(dataList));
 }
 
-function deleteTempData(){
+function deleteTempData(){    
+    event.preventDefault();
     if (confirm("Вы уверены, что хотите отчистить данные формы?") == true) order_form.reset();
 }
     </script>
