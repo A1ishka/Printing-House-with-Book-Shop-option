@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Типография</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/print.css">
+</head>
+<body>    
+    <%- include('parts/header.ejs') %>
+    <main>
+        <div class="form_div">
+            <form id="order_form">
+                <h2>Для предзаказа заполните форму</h2>
+                <div class="center-container">
+                <fieldset>
+                    <legend>Контактная информация</legend>
+                    <div class="container">
+                    <table>
+                        <tr>
+                            <td></td>
+                            <td><p align = "right">
+                                <br>ФИО: <input type="text" id="name" name ="name" placeholder="Иванов Иван Иванович" size="25"><br>
+                                <br>Контактный телефон: <input type="text" id="phone" name ="phone" placeholder ="+375 44 123 4567" size="17"><br>
+                            </p></td>
+                            <td></td>
+                            <td class="picture-form"><img src="../images/user.png" alt="user-picture"></td>
+                        </tr>
+                    </table>
+                    </div>
+                </fieldset>
+                </div>
+                <br> <br>
+                <div class="center-container">
+                <fieldset>
+                    <legend>Материалы</legend>
+                    <table><tr>
+                        <td><br>
+                            <div class="container"><label> <p>Бумага:
+                                <select id="image-select" required>
+                                    <option selected value="Газетная">Газетная</option>
+                                    <option value="Белая_неплотная">Белая, неплотная</option>
+                                    <option value="Белая_плотная">Белая, плотная</option>
+                                    <option value="Цв_слоновой_кости">Цв. слоновой кости</option>
+                                    <option value="Глянцевая">Глянцевая</option>
+                                    <option value="Под_холст">Под холст</option>
+                                </select></p>
+                            </label>
+                            <div class="bumaga"><img id="selected-image" src="../images/Газетная.jpg" alt="Бумага"></div></div>
+
+                            <label> <br><h3>Обложка</h3>
+                                <table><tr>
+                                    <td><fieldset>
+                                        <input type="radio" name = "r_type" value="Мягкая" autofocus> <img src="../images/obl_m.png" alt="Обложка мягкая"><p class="obl-type">Мягкая </p>
+                                    </fieldset></td>
+                                    <td><fieldset>
+                                        <input type="radio" name = "r_type" value="Твердая"> <img src="../images/obl_tv.jpg" alt="Обложка твердая"><p class="obl-type">Твердая </p>
+                                    </fieldset></td>
+                                    <td><fieldset>
+                                        <input type="radio" name = "r_type" value="Кожаная"> <img src="../images/obl_kozha.png" alt="Обложка кожаная"><p class="obl-type">Кожаная </p>
+                                    </fieldset></td>
+                                </tr></table>
+                            </label> 
+                        </td>
+                    </tr></table>
+                </fieldset></div>
+                <br> <br>
+                <div class="center-container">
+                    <fieldset><legend>Авторские данные</legend>
+                        <div class="container">
+                            <p>Загрузите подготовленный по книге документ:</p>
+                            <input type="file" id="fileInput">
+                            <button onclick="uploadFile()">Загрузить файл</button>
+                            <br><br><div id="bookName"></div><br>
+            
+                            <p>Загрузите обложку книги:</p>
+                            <input type="file" id="imageInput">
+                            <button onclick="loadImage()">Загрузить обложку</button>
+                            <br><br><div id="book_obl" class="book_obl"></div>
+                        </div>
+                    </fieldset>
+                </div>
+                <p align="center">
+                    <br><input type="checkbox" id="checked" name="checked" value="Срочная печать"> Срочная печать (готовность в течение месяца)<br>
+                    <br><button class="button-addData" role="button" id = "Submit" onclick="AddData()">Отправить</button>   <button class="button-addData" role="button" id="clearbtn" onclick="deleteTempData()">Отчистить</button>
+                </p>
+                
+            </form>
+        </div>
+    </main>
+    <%- include('parts/footer.ejs') %>
+
+    <script>
+        const selectElement = document.getElementById("image-select");
+        const imageElement = document.getElementById("selected-image");
+
+        selectElement.addEventListener("change", (event) => {
+        const selectedValue = event.target.value;
+        const imagePath = `../images/${selectedValue}.jpg`;
+        imageElement.src = imagePath;
+        });
+
+
+        function uploadFile() {
+            event.preventDefault();
+            let fileInput = document.getElementById("fileInput");
+            let file = fileInput.files[0];
+            var bookNameDiv = document.getElementById("bookName");
+
+            let reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = function() {
+                let fileContent = reader.result;
+                let firstLine = fileContent.split('\n')[0];
+                console.log(firstLine);
+                bookNameDiv.innerHTML = '<p>' + 'Хорошо, готовим к печати книгу с названием "' + firstLine + '".</p>';
+            };
+        };
+
+        function loadImage() {
+            event.preventDefault();
+            let imageInput = document.getElementById("imageInput");
+            let file = imageInput.files[0];
+            let fileName = file.name;
+            
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function() {
+                let imageDataUrl = reader.result;
+                let imageElement = document.createElement("img");
+                imageElement.src = imageDataUrl;
+                var obl_Div = document.getElementById("book_obl");
+                obl_Div.appendChild(imageElement);
+        };
+    };
+
+    function validateForm(){
+    var name = document.getElementById("name").value;
+    var phone = document.getElementById("phone").value;
+    var type = document.getElementById("selecting").value;
+    var radioType = document.querySelector('input[name="r_type"]:checked').value;
+    var checked = document.getElementById("checked").checked;
+
+    if(name == "" || phone == ""){
+        alert("Ввод контактных данных обязателен!");
+        return false;
+    }
+    return true;
+}
+    
+function AddData(index){
+    event.preventDefault();
+    alert("Заявка добавлена!");
+    if (validateForm() == true){
+        var name = document.querySelector("#name").value;
+        var phone = document.querySelector("#phone").value;
+        var selecting = document.getElementById("selecting").value;
+        var r_type = document.querySelector('input[name="r_type"]:checked').value;
+        var checked = document.getElementById("checked").checked;
+        var dataList;
+        if (localStorage.getItem("dataList") == null) {
+            dataList = [];
+        } else {
+            dataList = JSON.parse(localStorage.getItem("dataList"));
+        }
+        dataList.push({
+            name: name,
+            phone: phone,
+            selecting : selecting,
+            r_type: r_type,
+            checked: checked,
+        });
+        localStorage.setItem("dataList", JSON.stringify(dataList));
+        document.querySelector("#name").value = "";
+        document.querySelector("#phone").value = "";
+        document.getElementsByName("selecting").value = "";
+        document.getElementsByName("r_type").value = "";
+        document.getElementsByName("checked").value = "";
+
+    }
+}
+function deleteData(index){
+    var dataList;
+    if (localStorage.getItem("dataList") == null) {
+        dataList = [];
+    } else {
+        dataList = JSON.parse(localStorage.getItem("dataList"));
+    }
+    dataList.splice(index,1);
+    localStorage.setItem("dataList", JSON.stringify(dataList));
+}
+
+function deleteTempData(){
+    if (confirm("Вы уверены, что хотите отчистить данные формы?") == true) order_form.reset();
+}
+    </script>
+</body>
+</html>
