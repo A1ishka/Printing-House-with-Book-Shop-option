@@ -19,9 +19,7 @@ export const createPreOrder = async (req, res) => {
 	res.json(newPreOrder);
 } catch (err) {
 	console.log(err);
-    res.status(500).json({
-      message: 'Не удалось создать заказ',
-    });
+  res.render('./500.ejs');
 }
 };
 
@@ -44,9 +42,7 @@ export const updatePreOrder = async (req, res) => {
 	res.json(findPreOrder);
 } catch (err) {
 	console.log(err);
-    res.status(500).json({
-      message: 'Не удалось обновить',
-    });
+  res.render('./500.ejs');
 }
 };
 
@@ -54,16 +50,12 @@ export const getPreOrderById = async (req, res) => {
   try {
     const findPreOrder = await PreOrderSchema.findOne({ _id: req.params.id });
     if (!findPreOrder) {
-      return res.status(404).json({
-        message: 'findPreOrder не найден',
-      });
+      return res.render('./404.ejs');;
     
     }
     res.json(findPreOrder);
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      message: 'Не удалось получить findPreOrder',
-    });
+    res.render('./500.ejs');
   }
 };

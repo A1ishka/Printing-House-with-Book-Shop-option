@@ -5,23 +5,19 @@ export const isAdmin = function(roles){
     try {
       const user = await UserModel.findById(req.userId);
       if (!user) {
-        return res.status(404).json({
-          message: 'Пользователь не найден',
-        });
+        return res.render('./404.ejs');;
       }
       const { passwordHash, ...userData } = user._doc;
 
       let hasRole = false;
 
       if (user.role == roles[1]) hasRole = true;
-      if (!hasRole){ return res.status(405).json({message:'Доступ не разрешен'})}
+      if (!hasRole){ return res.render('./404.ejs');}
       next();
 
     } catch (err) {
       console.log(err);
-      res.status(500).json({
-        message: 'Нет доступа',
-      });
+      res.render('./500.ejs');
     }
   }
 };
@@ -31,22 +27,18 @@ export const isUser = function(roles){
     try {
       const user = await UserModel.findById(req.userId);
       if (!user) {
-        return res.status(404).json({
-          message: 'Пользователь не найден',
-        });
+        return res.render('./404.ejs');
       }
       const { passwordHash, ...userData } = user._doc;
 
       let hasRole = false;      
       if (user.role == roles[0]) hasRole = true;
-      if (!hasRole){ return res.status(405).json({message:'Доступ не разрешен'})}
+      if (!hasRole){ return res.render('./404.ejs');}
       next();
 
     } catch (err) {
       console.log(err);
-      res.status(500).json({
-        message: 'Нет доступа',
-      });
+      res.render('./500.ejs');
     }
   }
 };

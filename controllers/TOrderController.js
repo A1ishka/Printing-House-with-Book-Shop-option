@@ -1,6 +1,5 @@
 import TOrderSchema from '../models/T-order.js';
 
-
 export const createTOrder = async (req, res) => {
 	try {
         const TOrderData = new TOrderSchema({
@@ -16,20 +15,14 @@ export const createTOrder = async (req, res) => {
         res.json(newTOrder);
       } catch (err) {
         console.log(err);
-        res.status(500).json({
-          message: 'Не удалось создать заказ',
-        });
+        res.render('./500.ejs');
       }
     };
-
-
-
 
     export const countCost = async (req, res) => {
       try {
         const { obl_type, paper_type, pageCount, bookCount} = req.body;
         let totalPrice = 0;
-        //const obl_type = req.body['obl_type'];
           
         if (obl_type) {
           if (Array.isArray(obl_type)) {
@@ -60,8 +53,6 @@ export const createTOrder = async (req, res) => {
               }
             }
           }
-
-          //const paper_type = req.body['paper_type'];
         
           if (paper_type) {
             if (Array.isArray(paper_type)) {
@@ -111,32 +102,31 @@ export const createTOrder = async (req, res) => {
               }
             }
 
-            //const pageCount = parseInt(req.body['bookName']);
             if(paper_type == 'Глянцевая'){
               if (pageCount < 30) totalPrice*=1.2;
               else if (pageCount < 50) totalPrice*=1.4;
               else if (pageCount < 80) totalPrice*=1.6;
               else if (pageCount < 100) totalPrice*=1.8; 
-              else if (pageCount < 150) totalPrice*=2; 
+              else if (pageCount < 150) totalPrice*=2;
+              else totalPrice*=3; 
             }
             else if (pageCount < 300) totalPrice*=1.2;
             else if (pageCount < 500) totalPrice*=1.4;
             else if (pageCount < 800) totalPrice*=1.6;
             else if (pageCount < 1000) totalPrice*=1.8;
             else if (pageCount < 1300) totalPrice*=2;
+            else totalPrice*=3;
 
-            
-            //const bookCount = req.body['bookCount'];
             if (bookCount < 50) totalPrice*=bookCount;
             else if (bookCount < 100) totalPrice*=(bookCount*0.9);
             else if (bookCount < 300) totalPrice*=(bookCount*0.85);
             else if (bookCount < 1000) totalPrice*=(bookCount*0.7);
+            else if (bookCount < 5000) totalPrice*=(bookCount*0.6);
+            else totalPrice*=(bookCount*0.5);
             res.json({ totalPrice });
           } catch (err) {
             console.log(err);
-            res.status(500).json({
-              message: 'Не удалось создать заказ',
-            });
+            res.render('./500.ejs');
           }
         };
 

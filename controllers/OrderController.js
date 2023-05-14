@@ -123,9 +123,7 @@ export const createOrder = async (req, res) => {
 	res.json(newOrder);
 } catch (err) {
 	console.log(err);
-    res.status(500).json({
-      message: 'Не удалось создать заказ',
-    });
+    res.render('./500.ejs');
 }
 };
 
@@ -149,8 +147,7 @@ export const addToOrder =  async (req, res) => {
 	res.json({findOrder}); }
 } catch (err) {
 	console.log(err);
-    res.status(500).json({ message: 'Не удалось обновить заказ',});
-	}
+    res.render('./500.ejs');}
 };
 
 export const removeFromOrder =  async (req, res) => { //обработчик кнопки "убрать из заказа" + проверка (если это был единственный предзаказ в заказе...)
@@ -162,8 +159,7 @@ export const removeFromOrder =  async (req, res) => { //обработчик к�
 	res.json({findOrder});
 } catch (err) {
 	console.log(err);
-    res.status(500).json({ message: 'Не удалось обновить заказ',});
-	}
+    res.render('./500.ejs');}
 };
 
 export const changeStatus =  async (req, res) => { //кнопка оплаты
@@ -175,24 +171,18 @@ export const changeStatus =  async (req, res) => { //кнопка оплаты
 	res.json({ success: true, });
 } catch (err) {
 	console.log(err);
-    res.status(500).json({ message: 'Не удалось обновить заказ',});
-	}
+    res.render('./500.ejs');}
 };
 
 export const getOrderById = async (req, res) => {
     try {
       const findOrder = await OrderSchema.findOne({ _id: req.params.id });
       if (!findOrder) {
-        return res.status(404).json({
-          message: 'Заказ не найден',
-        });
-      
+        return res.render('./404.ejs');;
       }
       res.json(findOrder);
     } catch (err) {
       console.log(err);
-      res.status(500).json({
-        message: 'Не удалось получить заказ',
-      });
+      res.render('./500.ejs');
     }
 };

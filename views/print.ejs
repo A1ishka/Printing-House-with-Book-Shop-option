@@ -126,7 +126,7 @@
             .then(response => response.json())
             .then(data => {
                 const totalPriceElement = document.getElementById('total-price');
-                totalPriceElement.innerHTML = '<p align="center"><br>' + 'Ориентировочная цена составит ' + data.totalPrice + ' BYN.</p>';
+                totalPriceElement.innerHTML = '<p align="center"><br>' + 'Ориентировочная цена составит ' + data.totalPrice.toFixed(2) + ' BYN.</p>';
             
             })
             .catch(error => res.render('./500.ejs'));
@@ -201,7 +201,7 @@ function AddData(index){
             phone: phone,
             image_select : image_select,
             obl_type: obl_type,
-            count:count,
+            count: count,
             checked: checked,
         });
 
@@ -237,7 +237,6 @@ function AddData(index){
         document.getElementsByName("obl_type").value = "";
         document.getElementsByName("count").value = "";
         document.getElementsByName("checked").value = "";
-
     }
 }
 function deleteData(index){    

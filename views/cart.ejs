@@ -8,44 +8,14 @@
 <body>    
     <%- include('parts/header.ejs') %>
 
-    <script> 
-    function getMe(){
-    var user
-    accessToken = document.cookie
-    console.log(accessToken)
-    fetch('/auth/me', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Failed to fetch user data');
-      }
-    })
-    .then(data => { ////////////////////////////вот здесь нужно получить заказы
-      console.log(data)
-      user = data
-    })
-    .catch(error => {
-      console.error(error)
-    })
-  }
-  getMe()
-    </script>
     
-
-      <% if (%><%= user.order %><%) { %> <!--внесла перчинку в запись строки, теперь оно ломается на ;-->
-      <!--есть вариант вместе с нажатием на корзину передавать айдишник пользователя, но, как по мне, идея - залупа-->
+    <% if ( user.order ) { %> <!--внесла перчинку в запись строки, теперь оно ломается на ;-->
     <h1>Thank you for your order!</h1>
     <p>Your order has been received and is being processed. Here are the details:</p>
     <% user.order.forEach(function(order) { %> <!--здесь оно тоже было-->
     <ul>
       <li><strong>Order Name:</strong></li>
-      <li><%= order.user.orderName %></li>
+      <li><%= order.orderName %></li>
       <li><strong>Order number:</strong> <%= order._id %></li>
       <li><strong>Items:</strong></li>
       <ul>
@@ -54,11 +24,11 @@
         <% }) %>
       </ul>
       <li><strong>Total:</strong> <%= order.total %></li>
-      <!--<form action="/cart-delete-item" method="POST">
+      <form action="/cart-delete-item" method="POST">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        <input type="hidden" value="<%= p.productId._id %>" name="productId">
-        <button type="submit" class="btn danger"><i class="fas fa-trash"></i></button>
-      </form>-->
+        <input type="hidden" name="orderId" value="<%= order._id %>">
+        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+      </form>
       <li><strong>Status:</strong> <%= order.status %></li>
     </ul>
     <% }) %>

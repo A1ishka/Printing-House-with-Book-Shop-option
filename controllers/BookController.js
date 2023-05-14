@@ -17,9 +17,7 @@ export const getLastTags = async (req, res) => {
     res.json(uniqueTags); ////////////////'В последнее время использовались такие теги'
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      message: 'Не удалось получить тэги',
-    });
+    res.render('./500.ejs');
   }
 };
 
@@ -30,9 +28,7 @@ export const getAll = async (req, res) => {
     res.render('book-cards', { books });
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      message: 'Не удалось получить книги',
-    });
+    res.render('./500.ejs');
   }
 };
 
@@ -45,7 +41,7 @@ export const getBookByName = async (req, res) => {
     res.json(resullt); //что-то не так именно с поиском по имени!!!
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: 'Не удалось получить книги',});
+    res.render('./500.ejs');
   }
 };
 
@@ -53,17 +49,12 @@ export const getOne = async (req, res) => {
   try {
     const book = await BookSchema.findOne({ _id: req.params.id });
     if (!book) {
-      return res.status(404).json({
-        message: 'book не найден',
-      });
-    
+      return res.render('./404.ejs');
     }
     res.render('book-card', { book });
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      message: 'Не удалось получить книги',
-    });
+    res.render('./500.ejs');
   }
 };
 
@@ -78,9 +69,7 @@ export const remove = async (req, res) => {
     res.json({message: 'Книга была удалена'})
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      message: 'Не удалось получить книги',
-    });
+    res.render('./500.ejs');
   }
 };
 
@@ -101,9 +90,7 @@ export const create = async (req, res) => {
     res.json(newBook);
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      message: 'Не удалось создать книгу',
-    });
+    res.render('./500.ejs');
   }
 };
 
@@ -130,8 +117,6 @@ export const update = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      message: 'Не удалось обновить',
-    });
+    res.render('./500.ejs');
   }
 };
