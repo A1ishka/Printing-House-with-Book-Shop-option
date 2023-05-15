@@ -58,8 +58,8 @@ app.post('/books', /*checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), handl
 app.delete('/books/:id', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), BookController.remove);
 app.patch('/books/:id', checkAuth, Validations.bookCreateValidation, handleValidationErrors, BookController.update);
 
-app.post('/pre-order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.createPreOrder, OrderController.isOrderCreated);
-app.patch('/pre-order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.updatePreOrder);
+app.post('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.createPreOrder, OrderController.isOrderCreated);
+app.patch('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.updatePreOrder);
 app.post('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.createOrder);
 app.patch('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.addToOrder);
 app.delete('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.removeFromOrder);

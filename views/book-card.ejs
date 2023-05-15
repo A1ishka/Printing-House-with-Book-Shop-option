@@ -21,11 +21,11 @@
             <p class="tags"><strong>Тэги:</strong> <%= book.tags.join(', ') %></p>
             <p class="page-count"><strong>Количество страниц:</strong> <%= book.pageCount %></p>
             <p class="price"><strong>Цена/шт:</strong> <%= book.price.toFixed(2) %> BYN</p>
-            <form action="/pre-order" method="post">
-                <input type="hidden" name="bookId" value="<%= book._id %>">
+            <form id="preorder_form">
+                <input type="hidden" name="bookId" id="book-id" value="<%= book._id %>">
                 <h3><label for="quantity">Количество:</label></h3>
                 <input type="number" name="quantity" id="quantity" value="1" min="1" max="300">
-                <button type="submit">Добавить в корзину</button> <!--на обработчик навешиваем "создать предзаказ"
+                <button class="count-button submit-button" role="button" onclick="addToCart()">Добавить в корзину</button> <!--на обработчик навешиваем "создать предзаказ"
                 потом записываем в документ этот предзаказ и сразу же генерируем заказ
                 при дополнительном добавлении продуктов также генерируем предзаказ + добавление в уже имеющийся заказ
             
@@ -36,11 +36,8 @@
     </div>
     <script> 
         function addToCart(){
-
-            const form = document.querySelector('form');
-            form.addEventListener('submit', (event) => {
             event.preventDefault();
-            const bookId = document.querySelector('#bookId').value;
+            const bookId = document.querySelector('#book-id').value; //не считывает просто никак.....
             const quantity = document.querySelector('#quantity').value;
 
             const formData = {
@@ -48,10 +45,9 @@
                 quantity: quantity,
             };
 
-            var user;
             accessToken = document.cookie;
             console.log(accessToken);
-            fetch('/pre-order', {
+            fetch('/auth/me', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -61,20 +57,10 @@
             .then(response => {
             if (response.ok) {
                 return response.json();
-            } else {
-            throw new Error('Failed to fetch user data');
-            }
-            })
-            .then(data => { ////////////////////////////вот здесь нужно получить заказы
-                console.log(data);
-                //user = data;
-            })
+            } else { throw new Error('Failed to fetch user data'); }})
             .catch(error => {
                 res.render('./500.ejs');
-            });
-        },
-    )};
-    //addToCart();  //////////////////////////////////дофигачить именно кнопку!!!!!!!!!!!!!!
+            })};
     </script>
     </main>
     <%- include('parts/footer.ejs') %>
