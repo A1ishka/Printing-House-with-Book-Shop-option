@@ -85,7 +85,7 @@ header {
 
 .gr-text{
   max-width: 80em;
-  margin: relative ;
+  margin: auto ;
   padding: 1.5em;
 }
 
@@ -104,11 +104,16 @@ p {
   margin-bottom: 20px;
 }
 /*вынести по страницам*/
-
+.gr-text p {
+  font-size: 1.4em;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  margin-left: 7em;
+}
 
 
 .space{
-  height: 40em;
+  height: 33em;
   width: 20em;
 }
 
@@ -129,11 +134,16 @@ p {
   left: 0;
 }
 
+.mySlides img{
+  width: 100%;
+  height: 33em;
+}
+
 .fade {
   -webkit-animation-name: fade;
-  -webkit-animation-duration: 2s;
+  -webkit-animation-duration: 3s;
   animation-name: fade;
-  animation-duration: 2s;
+  animation-duration: 3s;
 }
 
 @-webkit-keyframes fade {
@@ -146,7 +156,26 @@ p {
   to {opacity: 1}
 }
 
+.button-container {
+  position: absolute;
+  padding-top: 30em;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
 
+.transparent-button {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 10px 20px;
+  font-size: 18px;
+  transition: opacity 0.3s;
+}
+
+.transparent-button:hover {
+  opacity: 0.7;
+}
 
 .info{
   align-items: center;
@@ -226,7 +255,7 @@ footer {
   .contact-info li a {
     color: #fff;
     text-decoration: none;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.5s ease-in-out;
   }
 
   .contact-info li a:hover {
