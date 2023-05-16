@@ -8,11 +8,10 @@
 <body>    
     <%- include('parts/header.ejs') %>
 
-    
-    <% if ( user.order ) { %> <!--внесла перчинку в запись строки, теперь оно ломается на ;-->
+    <% if (user.order) { %>
     <h1>Thank you for your order!</h1>
     <p>Your order has been received and is being processed. Here are the details:</p>
-    <% user.order.forEach(function(order) { %> <!--здесь оно тоже было-->
+    <% user.order.forEach(function(order) { %>
     <ul>
       <li><strong>Order Name:</strong></li>
       <li><%= order.orderName %></li>
@@ -34,11 +33,9 @@
     <% }) %>
 
     <% }else{ %>
-      <h1>No Products</h1>
+      <h1><br>No Products<br></h1><br>
       <%}%>
   
-
-    
     <%- include('parts/footer.ejs') %>
 </body>
 </html>
