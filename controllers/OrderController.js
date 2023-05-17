@@ -3,8 +3,7 @@ import PreOrderSchema from '../models/PreOrder.js';
 import OrderSchema from '../models/Order.js';
 
 
-export const isOrderCreated = function(){
-    const IIsOrderCreated = async function(req, res){	
+const IIsOrderCreated = async function(req, res){	
 	const findOrder = await OrderSchema.findOne({ userId: req.params.userId });
     const preorderData = req.PreOrder;
 	if (!findOrder || findOrder.status != "Формируется..") {
@@ -27,7 +26,8 @@ export const isOrderCreated = function(){
     }
         addToOrder(preorderData, res);
 }
-return IIsOrderCreated;};
+
+export const isOrderCreated = function(){ return IIsOrderCreated; };
 
 export const showOrder = async (req, res) => {
 //получаем в фронте???<!--findById(user.userId : user._id)-->

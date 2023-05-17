@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Поиск</title>
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/books.css">
+</head>
+<body>
+  <h1>Результаты поиска</h1>
+  <% if (results.length === 0) { %>
+    <p>Нет результатов</p>
+  <% } else { %>
+    
+
+  <div id="searchResults">
+    <div class="book-cards">
+        <% results.forEach(function(result) { %>
+            <div class="book-card" id="<%= result._id %>" >
+                <a href="/books/<%= result._id %>">
+                <div class="book-image">
+                    <img src="<%= result.imageUrl %>" alt="<%= result.name %>">
+                </div></a>
+                <div class="book-details">
+                    <!--<p><%= result.description %></p>
+                    <p>Tags: <%= result.tags.join(', ') %></p>
+                    <p>Page count: <%= result.pageCount %></p>-->                        
+                    <p><%= result.author %></p>
+                    <p>Цена/бел.р.: <%= result.price %></p>
+                    <p>На складе: <%= result.count %></p> 
+                </div>
+            </div>
+        <% }); %>      
+    </div> 
+  </div>
+  <% } %>
+
+  <a href="/books"><input type="button" class="search-button" role="button" value="Сбросить"></a>
+  <script src="../book.js"></script>
+</body>
+</html>

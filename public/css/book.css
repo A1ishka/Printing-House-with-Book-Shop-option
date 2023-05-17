@@ -1,87 +1,56 @@
-.book-align {
-    align-items: center;
-    margin-top: 3em;
-    margin-bottom: 3em;
-    margin-left: 20em;
+@import url(https://fonts.googleapis.com/css?family=Roboto:100,300,600);
+[id*=flat-slider].ui-slider,
+[id*=flat-slider].ui-slider .ui-slider-pip .ui-slider-line {
+  background: #7e8c9f;
 }
 
-.book-one-card {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 50px;
+[id*=flat-slider].ui-slider .ui-slider-handle .ui-slider-tip:after {
+  border-left-color: #434d5a;
 }
 
-.one-book-image {
-    flex: 0 0 30%;
-    margin-right: 10em;
-    
+[id*=flat-slider].ui-slider .ui-slider-handle.ui-state-hover,
+[id*=flat-slider].ui-slider .ui-slider-handle.ui-state-focus,
+[id*=flat-slider].ui-slider .ui-slider-handle.ui-state-active {
+  border-color: white;
 }
 
-.one-book-image img {
-    min-height: 20em;
-    max-height: 30em;
-    width: auto;
+.search_params {
+  background: #434d5a;
+  font-family: "Roboto";
+  width: 100%;
+  height: 30em;
 }
 
-.one-book-details {
-    flex: 0 0 60%;
+h1 {
+  color: #7e8c9f;
+  padding: 0;
+  margin: 0;
+  user-select: none;
+  cursor: default;
 }
 
-.one-book-details h1 {
-    font-size: 3rem;
-    margin-bottom: 10px;
+p {
+  color: #c7cdd5;
+  text-align: center;
+  margin: 0.5em 1em;
+  font-weight: 300;
+  font-size: 1.3em;
+}
+p:nth-of-type(1) {
+  margin-top: 3em;
+}
+p:last-child {
+  font-weight: 100;
+  font-size: 1em;
+}
+p:last-child a {
+  font-weight: 300;
 }
 
-.author {
-    font-size: 1.4rem;
-    font-style: italic;
+.stuff {
+  padding: 50px 50px 50px;
+  max-width: 900px;
+  margin: auto;
 }
 
-.description{
-    font-size: .9rem;
-    max-width: 45em;
-}
-
-.author, .description, .tags, .page-count, .price {
-    margin-bottom: .8em;
-}
-
-.tags strong {
-    font-weight: bold;
-}
-
-.price {
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-form {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-top: 20px;
-}
-
-form label {
-    margin-right: 10px;
-}
-
-form input[type="number"] {
-    width: 50px;
-}
-
-form button {
-    margin-left: 10px;
-    background-color: #df178f;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    font-size: 1.2rem;
-    cursor: pointer;
-}
-
-form button:hover {
-    background-color: #91076f;
-}
+/*# sourceMappingURL=book.css.map */

@@ -14,6 +14,7 @@ import * as PreOrderController from './controllers/PreOrderController.js';
 import * as OrderController from './controllers/OrderController.js';
 import * as TOrderController from './controllers/TOrderController.js';
 import cookieParser from 'cookie-parser';
+import Book from './models/Book.js';
 
 mongoose
 .connect('mongodb+srv://alika:qv8GdxBfWhxHT5YE@cluster0.kpu7dbl.mongodb.net/book?retryWrites=true&w=majority')
@@ -60,8 +61,8 @@ app.patch('/books/:id', checkAuth, Validations.bookCreateValidation, handleValid
 
 app.post('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.createPreOrder, OrderController.isOrderCreated);
 app.patch('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.updatePreOrder);
-app.post('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.createOrder);
-app.patch('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.addToOrder);
+//app.post('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.createOrder);
+//app.patch('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.addToOrder);
 app.delete('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.removeFromOrder);
 app.patch('/order-status', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.changeStatus);
 
@@ -71,6 +72,36 @@ app.post('/calculate-price', TOrderController.countCost);
 
 app.post('/adminrolecheck', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), BookController.getAll);
 app.post('/userrolecheck', checkAuth, RoleController.isUser(['USER', 'ADMIN']), BookController.getLastTags);
+
+
+
+app.get('/search', (req, res) => {
+  const searchQuery = req.query.q;
+  const minPrice = parseInt(req.query.minPrice);
+  const maxPrice = parseInt(req.query.maxPrice);
+
+  let filter = {};
+  filter = {
+    $or: [
+      { description: { $regex: searchQuery, $options: 'i' } },
+      { name: { $regex: searchQuery, $options: 'i' } },
+      { author: { $regex: searchQuery, $options: 'i' } }
+    ],
+    price: { $gte: minPrice, $lte: maxPrice }
+  };
+
+Book.find(filter)
+  .then(results => {
+    res.render('search', { results });
+  })
+  .catch(err => {
+    console.error('Ошибка при выполнении поискового запроса:', err);
+    res.render('./500.ejs');
+  });
+
+});
+
+
 
 app.listen(5050, (err) =>{
     if (err) { return console.log(err);}

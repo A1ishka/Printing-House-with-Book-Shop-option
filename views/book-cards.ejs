@@ -2,11 +2,119 @@
 <html>
 <head>
     <title>BookSHOP</title>
-    
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/books.css">        
 </head>
 <body>
     <%- include('parts/header.ejs') %>
+<div class="search_params">
+    <table><tr><td>
+    <div id="price-slider"></div>
+    <input type="text" id="min-price" readonly>
+    <input type="text" id="max-price" readonly>
+    <input type="text" id="searchInput" size="25" placeholder="Введите поисковой запрос"></td>
+    <td><input type="button" class="search-button" role="button" value="Поиск" onclick="search()"></td></tr></table>
+</div>
+
+<div id="searchResults"></div>
+
+<script>function search() {
+    event.preventDefault(); 
+    var searchQuery = document.getElementById('searchInput').value;
+    //var filterChecked = document.getElementById('filterCheckbox').checked;
+    var minPrice = document.getElementById('min-price').value;
+    var maxPrice = document.getElementById('max-price').value;
+    //const url = `/search?q=${encodeURIComponent(searchQuery)}&filter=${filterChecked}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+    const url = `/search?q=${encodeURIComponent(searchQuery)}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+
+    //fetch(`/search?q=${searchQuery}&filter=${filterChecked}&minPrice=${minPrice}&maxPrice=${maxPrice}`)
+    fetch(`/search?q=${searchQuery}&minPrice=${minPrice}&maxPrice=${maxPrice}`)
+    .then(response => {
+    if (!response.ok) { throw new Error('Ошибка при выполнении поискового запроса'); } return response.text();})
+    .then(html => { document.getElementById('searchResults').innerHTML = html; })
+    .catch(error => { console.error('Ошибка при выполнении поискового запроса:', error); });
+}
+      
+    function displayResults(results) {
+        var searchResults = document.getElementById('searchResults');
+        searchResults.innerHTML = '';
+        if (results.length === 0) {
+          searchResults.innerHTML = '<li>Нет результатов</li>';
+          return;
+        }
+    }
+
+
+    window.addEventListener('DOMContentLoaded', function() {
+    var slider = document.getElementById('price-slider');
+    var minPrice = document.getElementById('min-price');
+    var maxPrice = document.getElementById('max-price');
+    
+    var minValue = 5;
+    var maxValue = 25;
+    
+    var minHandle = document.createElement('div');
+    minHandle.className = 'slider-handle';
+    var maxHandle = document.createElement('div');
+    maxHandle.className = 'slider-handle';
+    
+    slider.appendChild(minHandle);
+    slider.appendChild(maxHandle);
+    
+    var sliderWidth = slider.offsetWidth;
+    var handleWidth = minHandle.offsetWidth;
+    
+    var range = maxValue - minValue;
+    
+    minHandle.style.left = '0px';
+    maxHandle.style.left = (sliderWidth - handleWidth) + 'px';
+    
+    function updatePrices() {
+      var minPos = parseFloat(minHandle.style.left) / (sliderWidth - handleWidth);
+      var maxPos = parseFloat(maxHandle.style.left) / (sliderWidth - handleWidth);
+      
+      var minPriceValue = minValue + (range * minPos);
+      var maxPriceValue = minValue + (range * maxPos);
+      
+      minPrice.value = minPriceValue.toFixed(1);
+      maxPrice.value = maxPriceValue.toFixed(1);
+    }
+    
+    function handleMouseDown(event) {
+      var handle = event.target;
+      var startX = event.clientX;
+      var handleLeft = handle.offsetLeft;
+      
+      function handleMouseMove(event) {
+        var diffX = event.clientX - startX;
+        var newLeft = handleLeft + diffX;
+        
+        if (newLeft < 0) { newLeft = 0; } 
+        else if (newLeft > (sliderWidth - handleWidth)) { newLeft = sliderWidth - handleWidth; }
+        
+        handle.style.left = newLeft + 'px';
+        updatePrices();
+      }
+      
+      function handleMouseUp(event) {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      }
+      
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+    
+    minHandle.addEventListener('mousedown', handleMouseDown);
+    maxHandle.addEventListener('mousedown', handleMouseDown);
+    
+    updatePrices();
+  });
+  
+    </script>
+
+</div><!--search-->
+
     <div class="book-cards">
         <% books.forEach(book => { %>
             <div class="book-card" id="<%= book._id %>" >
@@ -25,31 +133,6 @@
             </div>
         <% }); %>      
     </div> 
-    <script>
-        /*function onClickDiv(bookId){
-            const idData = {
-                bookId: bookId,
-            };
-
-            fetch('/book/bookId', {
-            method: 'GET', 
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(idData) })
-            .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-            throw new Error('Failed to fetch user data');
-            }
-            })
-            .catch(error => {
-            console.error(error);
-            });
-        }*/
-    </script>
-
     <%- include('parts/footer.ejs') %>
 </body>
 </html>
