@@ -52,9 +52,7 @@ export const register = async (req, res) => {
 
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      message: 'Не удалось зарегистрироваться',
-    });
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -63,9 +61,7 @@ export const login = async (req, res) => {
     const user = await UserModel.findOne({ email: req.body.email }); //аналогичная ситуация с регистрацией, но здесь не считывает
     console.log(req.body.email, user);
     if (!user) {
-      return res.status(404).json({
-        message: 'Пользователь не найден',
-      });
+      return res.render('./errors/404.ejs');
     }
 
     const isValidPass = await bcrypt.compare(req.body.password, user._doc.passwordHash);
@@ -94,9 +90,7 @@ export const login = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      message: 'Не удалось авторизоваться',
-    });
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -105,9 +99,7 @@ export const getMe = async (req, res) => {
     const user = await UserModel.findById(req.userId);
 
     if (!user) {
-      return res.status(404).json({
-        message: 'Пользователь не найден',
-      });
+      return res.render('./errors/404.ejs');
     }
 
     const { passwordHash, ...userData } = user._doc;
@@ -115,9 +107,7 @@ export const getMe = async (req, res) => {
     res.json(userData);
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      message: 'Нет доступа',
-    });
+    res.render('./errors/500.ejs');
   }
 };
 

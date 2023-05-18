@@ -21,7 +21,7 @@ const ССreatePreOrder = async function(req, res, next){
 	//res.json(newPreOrder);
 } catch (err) {
 	console.log(err);
-  res.render('./500.ejs');
+  res.render('./errors/500.ejs');
 }
 }
 
@@ -46,7 +46,7 @@ export const updatePreOrder = async (req, res) => {
 	res.json(findPreOrder);
 } catch (err) {
 	console.log(err);
-  res.render('./500.ejs');
+  res.render('./errors/500.ejs');
 }
 };
 
@@ -54,12 +54,12 @@ export const getPreOrderById = async (req, res) => {
   try {
     const findPreOrder = await PreOrderSchema.findOne({ _id: req.params.id });
     if (!findPreOrder) {
-      return res.render('./404.ejs');;
+      return res.render('./errors/404.ejs');;
     
     }
     res.json(findPreOrder);
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };

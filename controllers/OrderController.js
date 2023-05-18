@@ -12,7 +12,7 @@ const IIsOrderCreated = async function(req, res){
             res.send(result);
           } catch (error) {
             console.error(error);
-            res.render('./500.ejs');
+            res.render('./errors/500.ejs');
           }
     }
 	else {
@@ -21,7 +21,7 @@ const IIsOrderCreated = async function(req, res){
             res.send(result);
           } catch (error) {
             console.error(error);
-            res.render('./500.ejs');
+            res.render('./errors/500.ejs');
           }
     }
         addToOrder(preorderData, res);
@@ -80,7 +80,7 @@ export const removeFromOrder =  async (req, res) => { //обработчик к�
 	res.json({findOrder});
 } catch (err) {
 	console.log(err);
-    res.render('./500.ejs');}
+    res.render('./errors/500.ejs');}
 };
 
 export const changeStatus =  async (req, res) => { //кнопка оплаты
@@ -92,18 +92,18 @@ export const changeStatus =  async (req, res) => { //кнопка оплаты
 	res.json({ success: true, });
 } catch (err) {
 	console.log(err);
-    res.render('./500.ejs');}
+    res.render('./errors/500.ejs');}
 };
 
 export const getOrderById = async (req, res) => {
     try {
       const findOrder = await OrderSchema.findOne({ _id: req.params.id });
       if (!findOrder) {
-        return res.render('./404.ejs');;
+        return res.render('./errors/404.ejs');;
       }
       res.json(findOrder);
     } catch (err) {
       console.log(err);
-      res.render('./500.ejs');
+      res.render('./errors/500.ejs');
     }
 };

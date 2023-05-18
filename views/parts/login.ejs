@@ -3,25 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Login Page</title>
+    <link rel="stylesheet" href="../css/reg_login.css">
 </head>
 <body>
-    <h1>Login</h1>
-    <form method="POST" action="/auth/login">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email"><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password"><br>
-        <input type="submit" value="Login">
+    <div class="icon-img"><img src="../images/user-icon.png" alt="user-icon" width="10%" height="auto"></div>
+    <h1 class="login-h">Вход в аккаунт</h1>
+    <form class="form-signin" role="form" method="POST" action="/auth/login">
+        <input type="email" id="email" name="email" class="form-control" placeholder="Email@mail.com" required autofocus><br>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Пароль" required><br>
+        <div class = "subm-btn"><input type="submit" value="Войти" class="button-69" role="button"></div>
     </form>
+    <p class="and-line">а также</p>
+    <div class = "back-btn"> <a href="/"><input type="button" class="button-70" role="button" value="На главную"></a></div>
+
     
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
+    function postform() {
         const form = document.querySelector('form');
         form.addEventListener('submit', (event) => {
+            event.preventDefault();
             const password = document.querySelector('#password').value;
             const email = document.querySelector('#email').value;
-            console.log('//////////////////////////');
-            console.log(email, password);
-            console.log('||||||||||||||||||||||||||');
+            
 
             if (!password || !email) {
                 event.preventDefault();
@@ -29,21 +33,38 @@
             }
 
             const formData = {
+                email: email,
                 password: password,
-                email: email
             };
   
-            fetch('/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData) })
+            axios.post('/auth/login', formData, {
+            headers: { 'Content-Type': 'application/json' },})
             .then(response => {
-            if (response.ok) { return response.text();
-            } else { return Promise.reject(response); }})
+                console.log(response.data);})
+            .catch(error => {
+                console.log(error); });
+
+            console.log(JSON.stringify(formData));
 
             if ("Notification" in window) { Notification.requestPermission().then(function(permission) {
-                if (permission === "granted") { new Notification("Successful!"); }})}
+            if (permission === "granted") { new Notification("Successful!"); }})}
         });
+    }
+    postform();
+    function getJwtToken() {
+        const name = 'jwtToken=';
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const cookieArray = decodedCookie.split(';');
+
+        for (let i = 0; i < cookieArray.length; i++) {
+            let cookie = cookieArray[i];
+            while (cookie.charAt(0) === ' ') { cookie = cookie.substring(1); }
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length); }}
+                return null; 
+    };
+    const jwtToken = getJwtToken();
+    document.cookie = 'jwtToken=' + jwtToken + '; path=/; expires=' + expiryDate.toUTCString() + '; SameSite=Lax; Secure'; 
     </script>
 </body>
 </html>

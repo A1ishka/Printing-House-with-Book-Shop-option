@@ -8,7 +8,7 @@
 <body>
   <h1>Результаты поиска</h1>
   <% if (results.length === 0) { %>
-    <p>Нет результатов</p>
+    <div class="no-results">Нет книг, удовлетворяющих параметрам поиска</div>
   <% } else { %>
     
 
@@ -34,7 +34,12 @@
   </div>
   <% } %>
 
-  <a href="/books"><input type="button" class="search-button" role="button" value="Сбросить"></a>
+  <div class="clear-btn">
+    <a href="/books">
+      <input type="button" class="search-button clear-button" role="button" value="Сбросить">
+    </a>
+  </div>
+
   <script src="../book.js"></script>
 </body>
 </html>

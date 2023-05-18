@@ -41,7 +41,7 @@ export const getBookByName = async (req, res) => {
     res.json(resullt); //что-то не так именно с поиском по имени!!!
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -49,12 +49,12 @@ export const getOne = async (req, res) => {
   try {
     const book = await BookSchema.findOne({ _id: req.params.id });
     if (!book) {
-      return res.render('./404.ejs');
+      return res.render('./errors/404.ejs');
     }
     res.render('book-card', { book });
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -69,7 +69,7 @@ export const remove = async (req, res) => {
     res.json({message: 'Книга была удалена'})
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -90,7 +90,7 @@ export const create = async (req, res) => {
     res.json(newBook);
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -117,6 +117,6 @@ export const update = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };

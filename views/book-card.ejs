@@ -37,7 +37,7 @@
     <script> 
         function addToCart(){
             event.preventDefault();
-            const bookId = document.querySelector('#book-id').value; //не считывает просто никак.....
+            const bookId = document.querySelector('#book-id').value;
             const quantity = document.querySelector('#quantity').value;
 
             const formData = {
@@ -54,10 +54,6 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(formData) })
-            .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else { throw new Error('Failed to fetch user data'); }})
             .catch(error => {
                 res.render('./500.ejs');
             })};

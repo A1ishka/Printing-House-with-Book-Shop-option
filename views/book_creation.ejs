@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="css/book_creation.css">
+</head>
+<body>
+  <h1>Создание книги</h1>
+  <form>
+    <label for="name">Название:</label>
+    <input type="text" id="name" name="name" placeholder="Трудно быть богом" required>
+
+    <label for="description">Описание:</label>
+    <textarea id="description" name="description" placeholder="Увлекательная, полная драматизма история жизни, любви и приключений 'дона Руматы' из королевства Арканар на далекой планете – рыцаря с двумя мечами, под именем которого скрывается резидент с планеты Земля ХХII века Антон." required></textarea>
+
+    <label for="tags">Теги (через запятую):</label>
+    <input type="text" id="tags" name="tags" placeholder="Мистика, Фантастика">
+
+    <label for="pageCount">Количество страниц:</label>
+    <input type="number" id="pageCount" name="pageCount" placeholder="300">
+
+    <label for="author">Автор:</label>
+    <input type="text" id="author" name="author" placeholder="Братья Стругацкие" required>
+
+    <label for="price">Цена:</label>
+    <input type="number" id="price" name="price" placeholder="10" required>
+
+    <label for="count">Количество:</label>
+    <input type="number" id="count" name="count" value="100">
+
+    <label for="imageUrl">URL изображения:</label>
+    <input type="text" id="imageUrl" name="imageUrl" value="../images/book.png">
+
+    <input type="button" value="Создать" onclick="createAbook()">
+  </form>
+  <script>
+    function createAbook(){
+    event.preventDefault();
+  const name = document.getElementById("name").value;
+  const description = document.getElementById("description").value;
+  const tags = document.getElementById("tags").value.split(",");
+  const pageCount = document.getElementById("pageCount").value;
+  const author = document.getElementById("author").value;
+  const price = document.getElementById("price").value;
+  const count = document.getElementById("count").value;
+  const imageUrl = document.getElementById("imageUrl").value;
+
+  const bookData = {
+    name: name,
+    description: description,
+    tags: tags,
+    pageCount: pageCount,
+    author: author,
+    price: price,
+    count: count,
+    imageUrl: imageUrl
+  };
+
+  fetch("/create-book", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(bookData)
+  })
+  .then(response => {
+    if (response.ok) {
+      alert("Книга успешно создана!");
+      // Здесь можно выполнить дополнительные действия после успешного создания книги, например, перенаправление на другую страницу
+    } else {
+      alert("Ошибка при создании книги. Пожалуйста, попробуйте снова");
+    }
+  });
+};
+  </script>
+</body>
+</html>

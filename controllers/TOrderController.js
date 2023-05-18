@@ -15,7 +15,7 @@ export const createTOrder = async (req, res) => {
         res.json(newTOrder);
       } catch (err) {
         console.log(err);
-        res.render('./500.ejs');
+        res.render('./errors/500.ejs');
       }
     };
 
@@ -126,7 +126,7 @@ export const createTOrder = async (req, res) => {
             res.json({ totalPrice });
           } catch (err) {
             console.log(err);
-            res.render('./500.ejs');
+            res.render('./errors/500.ejs');
           }
         };
 

@@ -29,16 +29,17 @@ app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => { res.render('./index.ejs'); });
 app.get('/auth/register', (req, res) => { res.render('./parts/registration.ejs'); });
-app.get('/auth/login', (req, res) => { res.render('./login.ejs'); });
-app.get('/about', (req, res) => { res.render('./about.ejs'); }); //о компании
+app.get('/auth/login', (req, res) => { res.render('./parts/login.ejs'); });
+app.get('/about', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), (req, res) => { res.render('./admin_index.ejs'); }); //о компании
 app.get('/top-10-belkniga', (req, res) => { res.render('./top-10-belkniga.ejs'); });
-app.get('/print', (req, res) => { res.render('./print.ejs'); });
+app.get('/print', checkAuth, RoleController.isUser(['USER', 'ADMIN']), (req, res) => { res.render('./print.ejs'); });
 app.get('/404', (req, res) => { res.render('./404.ejs'); });
 app.get('/500', (req, res) => { res.render('./500.ejs'); });
+app.get('/create-book', checkAuth, /*RoleController.isAdmin(['USER', 'ADMIN']),*/ (req, res) => { res.render('./book_creation.ejs'); });
 
 app.post('/auth/login', UserController.login);
 app.post('/auth/register', Validations.registerValidation, UserController.register);
-app.get('/auth/me', checkAuth, async (req, res) =>  { //корзина
+app.get('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), async (req, res) =>  { //корзина
   try {
     let user = {};
     const data = await UserModel.findById(req.userId);
@@ -46,20 +47,20 @@ app.get('/auth/me', checkAuth, async (req, res) =>  { //корзина
     res.render('cart.ejs', { user: user});
   } catch (err) {
     console.error(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 });
 
 app.get('/tags', BookController.getLastTags);
 app.get('/books', BookController.getAll);
-app.get('/book-by-name', BookController.getBookByName);
+//app.get('/book-by-name', BookController.getBookByName);
 app.get('/books/tags', BookController.getLastTags);
 app.get('/books/:id', BookController.getOne);
-app.post('/books', /*checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), handleValidationErrors,*/ BookController.create);
+app.post('/create-book', /*checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), handleValidationErrors,*/ BookController.create);
 app.delete('/books/:id', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), BookController.remove);
 app.patch('/books/:id', checkAuth, Validations.bookCreateValidation, handleValidationErrors, BookController.update);
 
-app.post('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.createPreOrder, OrderController.isOrderCreated);
+app.post('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.createPreOrder,PreOrderController.createPreOrder, OrderController.isOrderCreated);
 app.patch('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.updatePreOrder);
 //app.post('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.createOrder);
 //app.patch('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.addToOrder);
@@ -83,7 +84,7 @@ app.get('/search', (req, res) => {
   let filter = {};
   filter = {
     $or: [
-      { description: { $regex: searchQuery, $options: 'i' } },
+      //{ description: { $regex: searchQuery, $options: 'i' } },
       { name: { $regex: searchQuery, $options: 'i' } },
       { author: { $regex: searchQuery, $options: 'i' } }
     ],
@@ -96,7 +97,7 @@ Book.find(filter)
   })
   .catch(err => {
     console.error('Ошибка при выполнении поискового запроса:', err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   });
 
 });
