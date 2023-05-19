@@ -1,31 +1,9 @@
 import BookSchema from '../models/Book.js';
 import PreOrderSchema from '../models/PreOrder.js';
 
-const ССreatePreOrder = async function(req, res, next){	
-	try {
-	const book = await BookSchema.findById(req.body.bookId); 
-  console.log(book);
-  const doc = new PreOrderSchema({
-		    bookId: book,
-        bookName: book.name,
-        bookPrice: book.price,
-      	quantity: req.body.quantity 
-    });
 
-  if (book.count >= doc.quantity) 
-    { book.count -= doc.quantity;
-      await book.save(); }
-    const newPreOrder = await doc.save();
-    req.preOrder = newPreOrder;
-    next();
-	//res.json(newPreOrder);
-} catch (err) {
-	console.log(err);
-  res.render('./errors/500.ejs');
-}
-}
 
-export const createPreOrder = function(){ return ССreatePreOrder; };
+//export const createPreOrder = function(){ return ССreatePreOrder; };
 
 export const updatePreOrder = async (req, res) => {
 	try {

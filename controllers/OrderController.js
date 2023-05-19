@@ -1,33 +1,47 @@
 import UserModel from '../models/User.js';
 import PreOrderSchema from '../models/PreOrder.js';
 import OrderSchema from '../models/Order.js';
+import BookSchema from '../models/Book.js'
 
-
-const IIsOrderCreated = async function(req, res){	
-	const findOrder = await OrderSchema.findOne({ userId: req.params.userId });
-    const preorderData = req.PreOrder;
-	if (!findOrder || findOrder.status != "Формируется..") {
-        try {
-            const result = await createOrder(preorderData);;
-            res.send(result);
-          } catch (error) {
-            console.error(error);
-            res.render('./errors/500.ejs');
-          }
+export const preOrderCr = async function(req, res){	
+  try {
+    const book = await BookSchema.findById(req.body.bookId); 
+    console.log(book);
+    const doc = new PreOrderSchema({
+          bookId: book,
+          bookName: book.name,
+          bookPrice: book.price,
+          quantity: req.body.quantity 
+      });
+  
+    if (book.count >= doc.quantity) 
+      { book.count -= doc.quantity;
+        await book.save(); }
+    const preorderData = await doc.save();
+     //закончили создание преордера, переходим к ордеру
+  const findOrder = await OrderSchema.find(req.params.userId).exec();
+  let flag = false;
+  if (findOrder){
+  findOrder.forEach((orders) => async (res, req) => {if (orders.status == "Формируется..") {
+    const result = await addToOrder(preorderData, orders);
+    flag = true;
+    res.send(result);
+  }})}
+  if (flag == false) {
+    try {
+      const user = await UserModel.findById(req.userId);
+      const result = await createOrder(preorderData, user);;
+      res.send(result);
+      } catch (error) {
+        console.error(error);
+        res.render('./errors/500.ejs');
+      }
     }
-	else {
-        try {
-            const result = await addToOrder(preorderData);
-            res.send(result);
-          } catch (error) {
-            console.error(error);
-            res.render('./errors/500.ejs');
-          }
-    }
-        addToOrder(preorderData, res);
+  } catch (error) {
+    console.error(error);
+    res.render('./errors/500.ejs');
+  }
 }
-
-export const isOrderCreated = function(){ return IIsOrderCreated; };
 
 export const showOrder = async (req, res) => {
 //получаем в фронте???<!--findById(user.userId : user._id)-->
@@ -36,38 +50,35 @@ const findOrder = await OrderSchema.findOne({ userId: req.params.id });//????
 };
 
 
-async function createOrder (preorderData){
+async function createOrder (preorderData, user){
 	try {
-	const findUser = await UserModel.findById(req.userId);
     let PreOrder = []
     PreOrder.push(preorderData);
     const doc = new OrderSchema({
       preOrder: PreOrder,
-      user: {
-		orderName: req.body.orderName,
-      	userId: findUser,}
+      user: {	userId: user, }
     });
     const newOrder = await doc.save();
 	return newOrder;
 } catch (err) { throw err; }
 };
 
-async function addToOrder (preorderData){
+async function addToOrder (preorderData, orders){
 	try {
-    const findOrder = await OrderSchema.findById(req.body.order);
 	let isEqual = true;
 	console.log(preorderData._id);
-	findOrder.preOrder.forEach ((element) => {
-
-	if (JSON.stringify(element._id) === JSON.stringify(preorderData._id)) {
-		isEqual = false;
-		res.json({message: 'Уже добавлено. Проверьте содержимое корзины'});
-	}console.log(isEqual);});
+	orders.preOrder.forEach ((element) => {
+	  if (JSON.stringify(element._id) === JSON.stringify(preorderData._id)) {
+		  isEqual = false;
+		  res.json({message: 'Уже добавлено. Проверьте содержимое корзины'});
+	  }
+    console.log(isEqual);
+  });
 
 	if (isEqual == true) {
-    findOrder.preOrder.push(preorderData);
-    findOrder.save();
-    return findOrder;}
+    orders.preOrder.push(preorderData);
+    await orders.save();
+    return orders;}
 } catch (err) { throw err; }
 };
 
