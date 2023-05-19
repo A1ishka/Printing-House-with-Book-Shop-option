@@ -5,7 +5,7 @@
 </head>
 <body>
   <h1>Создание книги</h1>
-  <form>
+  <form class="form-creation">
     <label for="name">Название:</label>
     <input type="text" id="name" name="name" placeholder="Трудно быть богом" required>
 
@@ -15,29 +15,25 @@
     <label for="tags">Теги (через запятую):</label>
     <input type="text" id="tags" name="tags" placeholder="Мистика, Фантастика">
 
-    <label for="pageCount">Количество страниц:</label>
-    <input type="number" id="pageCount" name="pageCount" placeholder="300">
+    <label for="pageCount"><i>спасите</i> Количество страниц:   <input type="number" id="pageCount" name="pageCount" placeholder="300" min="1" max="10000"></label>
 
     <label for="author">Автор:</label>
     <input type="text" id="author" name="author" placeholder="Братья Стругацкие" required>
 
-    <label for="price">Цена:</label>
-    <input type="number" id="price" name="price" placeholder="10" required>
-
-    <label for="count">Количество:</label>
-    <input type="number" id="count" name="count" value="100">
-
+    <label for="price"><i>нет</i>Цена:   <input type="number" id="price" name="price" placeholder="10" min="1" max="100" required><i>нет</i>Количество:   <input type="number" id="count" name="count" value="100" min="1" max="100000"></label>
+    <br>
     <label for="imageUrl">URL изображения:</label>
     <input type="text" id="imageUrl" name="imageUrl" value="../images/book.png">
 
-    <input type="button" value="Создать" onclick="createAbook()">
+    <input type="button" value="Создать" onclick="createAbook()" class="submit-button" role="button">
+    <a href="/"><input type="button" value="На главную" class="submit-button back" role="button"></a>
   </form>
   <script>
     function createAbook(){
     event.preventDefault();
   const name = document.getElementById("name").value;
   const description = document.getElementById("description").value;
-  const tags = document.getElementById("tags").value.split(",");
+  const tags = document.getElementById("tags").value.split(", ");
   const pageCount = document.getElementById("pageCount").value;
   const author = document.getElementById("author").value;
   const price = document.getElementById("price").value;
@@ -65,7 +61,6 @@
   .then(response => {
     if (response.ok) {
       alert("Книга успешно создана!");
-      // Здесь можно выполнить дополнительные действия после успешного создания книги, например, перенаправление на другую страницу
     } else {
       alert("Ошибка при создании книги. Пожалуйста, попробуйте снова");
     }

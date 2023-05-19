@@ -75,13 +75,20 @@ export const remove = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
+    
+    var tagsArray;
+    if (typeof req.body.tags === 'string') {
+      tagsArray = req.body.tags.split(', ');
+    } else {
+      tagsArray = req.body.tags;
+    }
     const bookData = new BookSchema({
         name: req.body.name,
         description: req.body.description,
         imageUrl: req.body.imageUrl,
         pageCount: req.body.pageCount,
         author: req.body.author,
-        tags: req.body.tags.split(', '),
+        tags: tagsArray,
         price: req.body.price,
         count: req.body.count,
     });

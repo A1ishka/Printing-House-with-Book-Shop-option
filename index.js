@@ -56,7 +56,7 @@ app.get('/books', BookController.getAll);
 //app.get('/book-by-name', BookController.getBookByName);
 app.get('/books/tags', BookController.getLastTags);
 app.get('/books/:id', BookController.getOne);
-app.post('/create-book', /*checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), handleValidationErrors,*/ BookController.create);
+app.post('/create-book', /*checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), */Validations.bookCreateValidation, BookController.create);
 app.delete('/books/:id', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), BookController.remove);
 app.patch('/books/:id', checkAuth, Validations.bookCreateValidation, handleValidationErrors, BookController.update);
 

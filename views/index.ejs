@@ -12,11 +12,10 @@
             <p>Мы отличаемся от других книжных издательств высоким уровнем специализации на одной книжной серии,<br> уделяя огромное внимание <i>мельчайшим деталям</i> и дополнительным материалам.</p>
             <p>А также поддерживаем начинающих авторов, <i>осуществляя их мечты</i> в своей типографии</p>
         </div>
-        <!--написать адекватный текст и переставить на другие картинки в слайд-шоу-->
           
             <div class="slideshow-container">
                 <div class="mySlides fade">
-                    <img src="../images/books_4.png" alt="Что-то пошло не так"> <!--просто подобрать нормальных картинок-->
+                    <img src="../images/books_4.png" alt="Что-то пошло не так"> 
                 </div>
                 <div class="mySlides fade">
                     <img src="../images/books_16.png" alt="Что-то пошло не так">
@@ -37,9 +36,7 @@
 
             <div class="space"></div>
         </main>
-           
-
-    
+               
     <%- include('parts/footer.ejs') %>
 
     <script>
@@ -54,7 +51,7 @@
             slideIndex++;
             if (slideIndex > slides.length) {slideIndex = 1}
             slides[slideIndex-1].style.display = "block";
-            setTimeout(showSlides, 10000);
+            setTimeout(showSlides, 5000);
         }
     </script>
 </body>

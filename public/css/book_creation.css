@@ -24,20 +24,64 @@ body {
     border: 1px solid #ccc;
   }
   
-  input[type="submit"] {
-    width: 30.8em;
-    padding: 1em;
-    background-color: #e552b2;
-    color: white;
-    border: none;
-    cursor: pointer;
-    margin-top: 1em;
-  }
-  
-  input[type="submit"]:hover {
-    background-color: #a045a0;
-  }
-  
   #description {
     height: 9em;
   }
+ 
+
+.submit-button {
+  background-color: #e552b2;
+  border-radius: 1em;
+  color: #000;
+  cursor: pointer;
+  padding: .8em 1.1em;
+  margin-top: 1em;
+  margin-left: 1em;
+  text-align: center;
+  transition: 200ms;
+  width: 12em;
+  box-sizing: border-box;
+  border: 0;
+  font-size: .9em;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.submit-button:not(:disabled):hover,
+.submit-button:not(:disabled):focus {
+  outline: 0;
+  background: #a045a0;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
+}
+
+.submit-button:disabled {
+  filter: saturate(0.2) opacity(0.5);
+  -webkit-filter: saturate(0.2) opacity(0.5);
+  cursor: not-allowed;
+}
+
+.back{
+   @extend .submit-button;
+   width: 8em;
+   background-color: rgb(104, 209, 104);
+}
+
+.form-data{
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.form-creation input[type="text"] {
+  margin-bottom: 1em;
+  border-radius: .5em;
+}
+
+.form-creation input[type="number"]{
+  width: 5em;
+
+}
+
+i{
+  color:white;
+}
