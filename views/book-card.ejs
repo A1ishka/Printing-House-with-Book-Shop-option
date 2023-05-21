@@ -12,7 +12,7 @@
     <div class="book-one-card">
         <table><tr><td>
         <div class="one-book-image">
-            <img src="<%= book.imageUrl %>" alt="<%= book.name %> cover">
+            <img src="<%= book.imageUrl %>" alt="<%= book.name %> cover" id="book-image">
         </div></td>
         <td><div class="one-book-details">
             <h1><%= book.name %></h1>
@@ -35,6 +35,34 @@
         </td></tr></table></div>
     </div>
     <script> 
+        const bookImage = document.getElementById('book-image');
+        let isFullScreen = false;
+        bookImage.addEventListener('click', toggleFullScreen);
+        function toggleFullScreen() {
+            if (!isFullScreen) {
+                if (bookImage.requestFullscreen) {
+                    bookImage.requestFullscreen();
+                } else if (bookImage.mozRequestFullScreen) {
+                    bookImage.mozRequestFullScreen();
+                } else if (bookImage.webkitRequestFullscreen) {
+                    bookImage.webkitRequestFullscreen();
+                } else if (bookImage.msRequestFullscreen) {
+                    bookImage.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+            isFullScreen = !isFullScreen;
+        }
+
         function addToCart(){
             event.preventDefault();
             const bookId = document.querySelector('#book-id').value;
@@ -55,7 +83,7 @@
             },
             body: JSON.stringify(formData) })
             .then(response => {
-            alert(message)})
+            if(response.ok) alert("Успешно добавлено!")})
             .catch(error => {
                 res.render('./500.ejs');
             })};
