@@ -6,11 +6,12 @@ import BookSchema from '../models/Book.js'
 export const preOrderCr = async function(req, res){	
   try {
     const book = await BookSchema.findById(req.body.bookId); 
-    console.log(book);
+    //console.log(book);
     const doc = new PreOrderSchema({
           bookId: book,
           bookName: book.name,
           bookPrice: book.price,
+          imageUrl: book.imageUrl,
           quantity: req.body.quantity 
       });
   
@@ -19,23 +20,21 @@ export const preOrderCr = async function(req, res){
         await book.save(); }
     const preorderData = await doc.save();
      //закончили создание преордера, переходим к ордеру
-  const findOrder = await OrderSchema.find(req.params.userId).exec();
-  let flag = false;
-  if (findOrder){
-  findOrder.forEach((orders) => async (res, req) => {if (orders.status == "Формируется..") {
-    const result = await addToOrder(preorderData, orders);
-    flag = true;
+
+  const order = await OrderSchema.findOne({
+    'user.userId': req.userId,
+    status: 'Формируется..'
+  }).exec(); 
+  
+  if (order) {
+    const result = await addToOrder(preorderData, order);
+    if(result == null){ res.json({message: 'Уже добавлено. Проверьте содержимое корзины'}); }
+    else res.send(result);
+    console.log('User has an order with status "In process"');
+  } else {
+    const result = await createOrder(preorderData, req.userId);;
     res.send(result);
-  }})}
-  if (flag == false) {
-    try {
-      const user = await UserModel.findById(req.userId);
-      const result = await createOrder(preorderData, user);;
-      res.send(result);
-      } catch (error) {
-        console.error(error);
-        res.render('./errors/500.ejs');
-      }
+    console.log('User does not have an order with status "In process"');
     }
   } catch (error) {
     console.error(error);
@@ -44,11 +43,19 @@ export const preOrderCr = async function(req, res){
 }
 
 export const showOrder = async (req, res) => {
-//получаем в фронте???<!--findById(user.userId : user._id)-->
-
-const findOrder = await OrderSchema.findOne({ userId: req.params.id });//????
-};
-
+try {
+  const orders = await OrderSchema.find({
+    'user.userId': req.userId,
+    status: 'Формируется..' || 'К оплате'
+  }).exec(); 
+  const preOrderIds = orders.flatMap((order) => order.preOrder);
+  const preOrders = await PreOrderSchema.find({ _id: { $in: preOrderIds } }).exec();
+  //console.log(orders, "------------------", preOrders);
+  res.render('cart', { orders: orders, preOrders: preOrders });
+} catch (err) {
+  console.log(err);
+  res.render('./500.ejs');
+}};
 
 async function createOrder (preorderData, user){
 	try {
@@ -63,22 +70,38 @@ async function createOrder (preorderData, user){
 } catch (err) { throw err; }
 };
 
-async function addToOrder (preorderData, orders){
+/*
+итак, что нужно еще сделать:
+-нормально пофиксить проверку на повторения и поиндексное схватывание преордеров
+(а то обновляет исключительно первый вне зависимости от пользовательского выбора)
+-удаление преордеров из заказа
+-оформление адреса доставки и тд 
+-закончить с оформлением страницы (прикол с NOproduct работает ли)
+*/
+
+
+
+async function addToOrder (preorderData, order){
 	try {
 	let isEqual = true;
-	console.log(preorderData._id);
-	orders.preOrder.forEach ((element) => {
-	  if (JSON.stringify(element._id) === JSON.stringify(preorderData._id)) {
+	order.preOrder.forEach (async (element) =>  {
+  const findPreOrder = await PreOrderSchema.findOne({ _id: element }); 
+  
+  console.log(JSON.stringify(findPreOrder.bookId));
+  console.log(JSON.stringify(preorderData.bookId._id));
+	console.log("-----------------------------------");
+
+	  if (JSON.stringify(findPreOrder.bookId) == JSON.stringify(preorderData.bookId._id)) {
 		  isEqual = false;
-		  res.json({message: 'Уже добавлено. Проверьте содержимое корзины'});
 	  }
     console.log(isEqual);
   });
 
 	if (isEqual == true) {
-    orders.preOrder.push(preorderData);
-    await orders.save();
-    return orders;}
+    order.preOrder.push(preorderData);
+    await order.save();
+    return order;
+  } else return null;
 } catch (err) { throw err; }
 };
 

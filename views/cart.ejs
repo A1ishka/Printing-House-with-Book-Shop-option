@@ -8,34 +8,102 @@
 <body>    
     <%- include('parts/header.ejs') %>
 
-    <% if (user.order) { %>
-    <h1>Thank you for your order!</h1>
-    <p>Your order has been received and is being processed. Here are the details:</p>
-    <% user.order.forEach(function(order) { %>
+    <% if (orders != undefined) { %>
+    <h1>Спасибо за Ваш заказ!</h1>
+    <div class="order-description">
+      <p>Завершением текущего заказа будет считаться его оплата.</p>
+    </div>
+        
+    <% var total = 0; %>
+    <div id="orderList">
+    <table><% preOrders.forEach(function(item, index) { %>
+      <tr>
+        <td>
+          <a href="/books/<%= item._id %>">
+            <div class="book-image">
+                <img src="<%= item.imageUrl %>" alt="<%= item.bookName %>">
+            </div></a>
+        </td>
+        <td>
+          <p>Название книги: <i><%= item.bookName %></i></p>
+          <p>Цена за штуку: <i><%= item.bookPrice %> BYN</i></p>
+          <p><label for="quantity">Количество:   
+          <input type="number" id="quantity_<%= index %>" size="6" min="1" max="1000" value="<%= item.quantity %>" onchange="updateQuantity(<%= index %>, this.value)">
+          <button id="updateButton_<%= index %>" class="update-preorder-data-button" onclick="updateQuantity(<%= index %>, document.getElementById('quantity_<%= index %>').value)">Сохранить</button></label></p>
+          
+          <p><strong>Суммарно за предзаказ:</strong> <i id="total_<%= index %>"><%= item.bookPrice * item.quantity %> BYN</i></p>
+          <% total += item.bookPrice * item.quantity; %>
+        </td>
+      </tr>
+      <% }) %></div>
+
+      <input type="hidden" id="preOrdersData" value='<%- JSON.stringify(preOrders) %>'>
+
+      <script>
+        var preOrders = JSON.parse(document.getElementById('preOrdersData').value);
+      
+        function updateQuantity(index, newQuantity) {
+          console.log(index)
+          preOrders[index].quantity = parseInt(newQuantity);
+          updateTotal();
+          var item = preOrders[index];
+          var total = item.bookPrice * item.quantity;
+          document.getElementById('total_' + index).innerHTML = total.toFixed(1) + " BYN";
+        //подготовка к отправке на сервер      
+          var preOrderId = preOrders[index]._id; 
+          var updatedData = { preOrderId: preOrderId, quantity: newQuantity };
+
+          var updateButton = document.getElementById('updateButton_' + index);
+          updateButton.onclick = function() {
+            var url = '/auth/me/' + preOrderId + '/update'; 
+            var request = new XMLHttpRequest();
+            request.open('POST', url);
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.onreadystatechange = function() {
+              if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) { console.log('Заказ успешно обновлен в базе данных');
+                } else { console.error('Произошла ошибка при обновлении заказа');}
+              }
+            };
+          request.send(JSON.stringify(updatedData));
+          };
+        }
+
+        function updateTotal() {
+          var total = preOrders.reduce(function(acc, item) {
+            return acc + (item.bookPrice * item.quantity);
+          }, 0);
+          document.getElementById('orderTotal').innerHTML = total.toFixed(1) + " BYN";
+        }
+      </script>
+      
+       
+      <tr colspan="2">
+        <td><p>Итоговая сумма: <span id="orderTotal"><%= preOrders.reduce((acc, item) => acc + (item.bookPrice * item.quantity), 0).toFixed(1) %> BYN</span></p></td>
+      </tr>
+    </table>
+
+
+    <!--еще писать и писать-->
+    <% orders.forEach(function(order) { %>
     <ul>
       <li><strong>Order Name:</strong></li>
       <li><%= order.orderName %></li>
-      <li><strong>Order number:</strong> <%= order._id %></li>
-      <li><strong>Items:</strong></li>
-      <ul>
-        <% order.preOrder.forEach(function(item) { %>
-          <li><%= item.bookName %> - <%= item.bookPrice %> - <%= item.quantity %></li>
-        <% }) %>
-      </ul>
-      <li><strong>Total:</strong> <%= order.total %></li>
-      <form action="/cart-delete-item" method="POST">
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        <input type="hidden" name="orderId" value="<%= order._id %>">
-        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
-      </form>
       <li><strong>Status:</strong> <%= order.status %></li>
-    </ul>
+      <ul>
+    <form action="/cart-delete-items" method="POST">
+      <input type="hidden" name="orderId" value="<%= order._id %>">
+      <button type="submit">Отчистить заказ</button>
+    </form>
+  </ul>
+  <!--обрабатывать и обрабатывать-->
+    
+    <div class="order-description"><p>Приобретайте эксклюзивные книги и книжные наборы только у нас!</p></div> 
     <% }) %>
 
     <% }else{ %>
       <h1><br>No Products<br></h1><br>
       <%}%>
-  
     <%- include('parts/footer.ejs') %>
 </body>
 </html>

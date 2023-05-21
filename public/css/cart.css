@@ -14,7 +14,7 @@ body {
   
   h1 {
     font-family: Arial, sans-serif;
-    margin-top: 0;
+    margin-top: 1em;
   }
   
   ul {
@@ -40,3 +40,55 @@ body {
     color: #999;
   }
   
+  table {
+    table-layout: fixed;
+    width: 50%;
+    border-collapse: collapse;
+    background-color: rgb(210, 185, 234);
+    margin-left: 23em;
+  }
+
+  tr {
+    border: 4mm ridge rgba(161, 32, 161, .6);
+
+  }
+
+  td{
+    min-width: 10em;
+  }
+
+  .order-description{
+    margin-left: 31em;
+  }
+
+  
+.update-preorder-data-button {
+  background-color: #ac33d4;
+  border-radius: .2em;
+  color: #000;
+  cursor: pointer;
+  padding: .4em .7em;
+  margin-left: .5em;
+  text-align: center;
+  transition: 200ms;
+  width: 7em;
+  box-sizing: border-box;
+  border: 0;
+  font-size: .7em;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.update-preorder-data-button:not(:disabled):hover,
+.update-preorder-data-button:not(:disabled):focus {
+  outline: 0;
+  background: #a045a0;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
+}
+
+.update-preorder-data-button:disabled {
+  filter: saturate(0.2) opacity(0.5);
+  -webkit-filter: saturate(0.2) opacity(0.5);
+  cursor: not-allowed;
+}

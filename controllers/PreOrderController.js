@@ -1,16 +1,13 @@
 import BookSchema from '../models/Book.js';
 import PreOrderSchema from '../models/PreOrder.js';
 
-
-
-//export const createPreOrder = function(){ return ССreatePreOrder; };
-
 export const updatePreOrder = async (req, res) => {
 	try {
-  const findPreOrder = await PreOrderSchema.findOne({ _id: req.body.preOrderId });
+  const findPreOrder = await PreOrderSchema.findOne({ preOrderId: req.params.preOrderId });
+  console.log(findPreOrder);
   const findBook = await BookSchema.findOne({ _id: findPreOrder.bookId });
 
-  findBook.count += findPreOrder.quantity;
+  findBook.count += req.body.quantity;
   await findBook.save();
 
   const updateCount = req.body.quantity;
@@ -21,7 +18,8 @@ export const updatePreOrder = async (req, res) => {
       await findBook.save(); }
 
   await findPreOrder.save();
-	res.json(findPreOrder);
+	//res.json(findPreOrder);
+  res.sendStatus(200);
 } catch (err) {
 	console.log(err);
   res.render('./errors/500.ejs');

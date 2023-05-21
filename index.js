@@ -39,21 +39,11 @@ app.get('/create-book', checkAuth, /*RoleController.isAdmin(['USER', 'ADMIN']),*
 
 app.post('/auth/login', UserController.login);
 app.post('/auth/register', Validations.registerValidation, UserController.register);
-app.get('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), async (req, res) =>  { //корзина
-  try {
-    let user = {};
-    const data = await UserModel.findById(req.userId);
-    user = data.toJSON;
-    res.render('cart.ejs', { user: user});
-  } catch (err) {
-    console.error(err);
-    res.render('./errors/500.ejs');
-  }
-});
+app.get('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.showOrder);
+app.post('/auth/me/:orderId/update', PreOrderController.updatePreOrder);
 
 app.get('/tags', BookController.getLastTags);
 app.get('/books', BookController.getAll);
-//app.get('/book-by-name', BookController.getBookByName);
 app.get('/books/tags', BookController.getLastTags);
 app.get('/books/:id', BookController.getOne);
 app.post('/create-book', /*checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), */Validations.bookCreateValidation, BookController.create);
@@ -62,8 +52,6 @@ app.patch('/books/:id', checkAuth, Validations.bookCreateValidation, handleValid
 
 app.post('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.preOrderCr);
 app.patch('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.updatePreOrder);
-//app.post('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.createOrder);
-//app.patch('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.addToOrder);
 app.delete('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.removeFromOrder);
 app.patch('/order-status', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.changeStatus);
 

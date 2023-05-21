@@ -54,6 +54,8 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(formData) })
+            .then(response => {
+            alert(message)})
             .catch(error => {
                 res.render('./500.ejs');
             })};

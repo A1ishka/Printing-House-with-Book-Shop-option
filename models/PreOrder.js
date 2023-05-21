@@ -12,10 +12,13 @@ const PreOrderSchema = new mongoose.Schema({
 	bookPrice:{
 		type: Number,
 	},
+    imageUrl: {
+		type: String,
+	},
 	quantity: {
 		type: Number,
 		default: 1,
-	}
+	},
 	},
   );
 
