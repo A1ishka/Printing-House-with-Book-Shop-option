@@ -31,7 +31,6 @@ export const getPreOrderById = async (req, res) => {
     const findPreOrder = await PreOrderSchema.findOne({ _id: req.params.id });
     if (!findPreOrder) {
       return res.render('./errors/404.ejs');;
-    
     }
     res.json(findPreOrder);
   } catch (err) {

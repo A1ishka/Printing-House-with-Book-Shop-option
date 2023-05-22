@@ -95,16 +95,17 @@ async function addToOrder (preorderData, order){
 } catch (err) { throw err; }
 };
 
-export const removeFromOrder =  async (req, res) => { //обработчик кнопки "убрать из заказа" + проверка (если это был единственный предзаказ в заказе...)
+export const removeFromOrder =  async (req, res) => {
 	try {
-    const findOrder = await OrderSchema.findById(req.body.order);
-	const findPreOrder = await PreOrderSchema.findById(req.body.preOrder); 
+    const findOrder = await OrderSchema.findById(req.body.orderId);
+	  const findPreOrder = await PreOrderSchema.findById(req.params.preOrderId); 
     findOrder.preOrder.pop(findPreOrder);
     findOrder.save();
-	res.json({findOrder});
-} catch (err) {
-	console.log(err);
-    res.render('./errors/500.ejs');}
+	  res.json({findOrder});
+  } catch (err) {
+	  console.log(err);
+    res.render('./errors/500.ejs');
+  }
 };
 
 export const changeStatus =  async (req, res) => { //кнопка оплаты

@@ -44,6 +44,7 @@ app.post('/auth/me/:orderId/update', PreOrderController.updatePreOrder);
 app.post('/auth/me/:orderId/update/status', OrderController.changeStatus);
 app.post('/auth/me/:orderId/update/status/delete', OrderController.changeStatusToDelete);
 app.post('/auth/me/:orderId/update/adress', OrderController.changeAdress);
+app.post('/auth/me/:orderId/delete', OrderController.removeFromOrder);
 
 app.get('/tags', BookController.getLastTags);
 app.get('/books', BookController.getAll);
