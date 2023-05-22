@@ -42,6 +42,8 @@ app.post('/auth/register', Validations.registerValidation, UserController.regist
 app.get('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.showOrder);
 app.post('/auth/me/:orderId/update', PreOrderController.updatePreOrder);
 app.post('/auth/me/:orderId/update/status', OrderController.changeStatus);
+app.post('/auth/me/:orderId/update/status/delete', OrderController.changeStatusToDelete);
+app.post('/auth/me/:orderId/update/adress', OrderController.changeAdress);
 
 app.get('/tags', BookController.getLastTags);
 app.get('/books', BookController.getAll);

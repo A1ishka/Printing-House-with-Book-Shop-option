@@ -6,7 +6,6 @@ import BookSchema from '../models/Book.js'
 export const preOrderCr = async function(req, res){	
   try {
     const book = await BookSchema.findById(req.body.bookId); 
-    //console.log(book);
     const doc = new PreOrderSchema({
           bookId: book,
           bookName: book.name,
@@ -20,7 +19,6 @@ export const preOrderCr = async function(req, res){
         await book.save(); }
     const preorderData = await doc.save();
      //закончили создание преордера, переходим к ордеру
-
   const order = await OrderSchema.findOne({
     'user.userId': req.userId,
     status: 'Формируется..'
@@ -46,11 +44,10 @@ export const showOrder = async (req, res) => {
 try {
   const orders = await OrderSchema.find({
     'user.userId': req.userId,
-    status: 'Формируется..'&& 'К оплате'
+    status: 'Формируется..' || 'К оплате'
   }).exec(); 
   const preOrderIds = orders.flatMap((order) => order.preOrder);
   const preOrders = await PreOrderSchema.find({ _id: { $in: preOrderIds } }).exec();
-  //console.log(orders, "------------------", preOrders);
   res.render('cart', { orders: orders, preOrders: preOrders });
 } catch (err) {
   console.log(err);
@@ -86,16 +83,9 @@ async function addToOrder (preorderData, order){
 	let isEqual = true;
 	order.preOrder.forEach (async (element) =>  {
   const findPreOrder = await PreOrderSchema.findOne({ _id: element }); 
-  
-  console.log(JSON.stringify(findPreOrder.bookId));
-  console.log(JSON.stringify(preorderData.bookId._id));
-	console.log("-----------------------------------");
-
-	  if (JSON.stringify(findPreOrder.bookId) == JSON.stringify(preorderData.bookId._id)) {
-		  isEqual = false;
-	  }
-    console.log(isEqual);
-  });
+	if (JSON.stringify(findPreOrder.bookId) == JSON.stringify(preorderData.bookId._id)) {
+		isEqual = false;
+	}});
 
 	if (isEqual == true) {
     order.preOrder.push(preorderData);
@@ -122,6 +112,28 @@ export const changeStatus =  async (req, res) => { //кнопка оплаты
     const findOrder = await OrderSchema.findById(req.params.orderId);
 	if (findOrder.status == "К оплате") findOrder.status = "Оплачено";
 	if (findOrder.status == "Формируется..") findOrder.status = "К оплате";
+    findOrder.save();
+	res.json({ success: true, });
+} catch (err) {
+	console.log(err);
+    res.render('./errors/500.ejs');}
+};
+
+export const changeStatusToDelete =  async (req, res) => { //кнопка оплаты
+	try {
+    const findOrder = await OrderSchema.findById(req.params.orderId);
+	  findOrder.status = "Удалено";
+    findOrder.save();
+	res.json({ success: true, });
+} catch (err) {
+	console.log(err);
+    res.render('./errors/500.ejs');}
+};
+
+export const changeAdress =  async (req, res) => { //кнопка оплаты
+	try {
+    const findOrder = await OrderSchema.findById(req.params.orderId);
+    findOrder.user.Adress = req.body.Adress;
     findOrder.save();
 	res.json({ success: true, });
 } catch (err) {

@@ -8,11 +8,8 @@
 <body>    
     <%- include('parts/header.ejs') %>
 
-    <% if (orders != undefined) { %>
-    <h1>Спасибо за Ваш заказ!</h1>
-    <div class="order-description">
-      <p>Завершением текущего заказа будет считаться его оплата.</p>
-    </div>
+    <% if (orders != undefined && orders != null) { %>
+    
         
     <% var total = 0; %>
     <div id="orderList">
@@ -29,7 +26,7 @@
           <p>Цена за штуку: <i><%= item.bookPrice %> BYN</i></p>
           <p><label for="quantity">Количество:   
           <input type="number" id="quantity_<%= index %>" size="6" min="1" max="1000" value="<%= item.quantity %>" onchange="updateQuantity(<%= index %>, this.value)">
-          <button id="updateButton_<%= index %>" class="update-preorder-data-button" onclick="updateQuantity(<%= index %>, document.getElementById('quantity_<%= index %>').value)">Сохранить</button></label></p>
+          <button id="updateButton_<%= index %>" class="update-data-button" onclick="updateQuantity(<%= index %>, document.getElementById('quantity_<%= index %>').value)">Сохранить</button></label></p>
           
           <p><strong>Суммарно за предзаказ:</strong> <i id="total_<%= index %>"><%= item.bookPrice * item.quantity %> BYN</i></p>
           <% total += item.bookPrice * item.quantity; %>
@@ -76,30 +73,45 @@
           document.getElementById('orderTotal').innerHTML = total.toFixed(1) + " BYN";
         }
       </script>
-      
-       
-      <tr colspan="2">
-        <td><p>Итоговая сумма: <span id="orderTotal"><%= preOrders.reduce((acc, item) => acc + (item.bookPrice * item.quantity), 0).toFixed(1) %> BYN</span></p></td>
-      </tr>
-
-    <tr><td>
-    <% orders.forEach(function(order, index) { %>
-    <ul>
-      <li><strong>Order Name:</strong></li><!--переделать поле для ввода-->
-      <li><%= order.orderName %></li>
-      <strong>Status:</strong> <input type="button" class="update-preorder-data-button" onclick="changeStatus()" value="<%= order.status %>">
-      <input type="hidden" name="orderId" value="<%= order._id %>" id="orderCancel">
-      <input type="button" class="update-preorder-data-button" onclick="changeStatus()" value="Удалить"> 
-      <!--стырить функционал кнопки выше, добавить статус "Удалено"-->
-    </form>
-  </ul>
     
-   </td></tr></table>
+    <% orders.forEach(function(order, index) { %>
+      <tr colspan="2" align="center">
+        <td rowspan="2"><p>Итоговая сумма: <span id="orderTotal"><%= preOrders.reduce((acc, item) => acc + (item.bookPrice * item.quantity), 0).toFixed(1) %> BYN</span></p></td>
+      </tr>
+      <tr colspan="2"><td><ul>
+      <li><strong>Адрес доставки: </strong>
+      <input type="text" id="Adress" value="<%= order.Adress %>" placeholder="<%= order.Adress %>" >
+      <input type="button" class="update-data-button" onclick="saveOrderAdress()" value="Сохранить"> </li>
+      <strong>Статус заказа:</strong> <input type="button" class="update-data-button" onclick="changeStatus()" value="<%= order.status %>" id="orderStatus">
+      <input type="hidden" name="orderId" value="<%= order._id %>" id="orderCancel">
+      <input type="button" class="update-data-button" onclick="changeStatusToDelete()" value="Удалить"> 
+    </ul></td>
+    
   <script>
+  function saveOrderAdress() {
+  var orderAdressInput = document.getElementById('Adress');
+  var orderAdress = orderAdressInput.value;
+  var orderId = document.getElementById('orderCancel').value;
+  var updatedData = { orderId: orderId, Adress: orderAdress }; 
+  var url = '/auth/me/' + orderId + '/update/adress';
+  var request = new XMLHttpRequest();
+  request.open('POST', url);
+  request.setRequestHeader('Content-Type', 'application/json');
+  request.onreadystatechange = function() {
+    if (request.readyState === XMLHttpRequest.DONE) {
+      if (request.status === 200) {
+        console.log('Имя заказа успешно обновлено в базе данных');
+      } else { console.error('Произошла ошибка при обновлении имени заказа');}
+    }
+  };
+  request.send(JSON.stringify(updatedData));
+}
+
   function changeStatus() {
   event.preventDefault();
   var orderId = document.getElementById('orderCancel').value;
-
+  var statusButton = document.getElementById('orderStatus');
+  var previousStatus = statusButton.value;
   var status = '<%= order.status %>';
   var url = '/auth/me/' + orderId + '/update/status';
   var request = new XMLHttpRequest();
@@ -109,6 +121,8 @@
     if (request.readyState === XMLHttpRequest.DONE) {
       if (request.status === 200) {
         console.log('Статус заказа успешно обновлен в базе данных');
+        if (previousStatus == "К оплате") statusButton.value = "Оплачено";
+	      if (previousStatus == "Формируется..") statusButton.value = "К оплате";
       } else {
         console.error('Произошла ошибка при обновлении статуса заказа');
       }
@@ -116,13 +130,41 @@
   };
   request.send(JSON.stringify({ status: status }));
 }
-
+function changeStatusToDelete(){
+  event.preventDefault();
+  if (confirm("Вы уверены, что хотите удалить заказ?") == true){
+  var orderId = document.getElementById('orderCancel').value;
+  var statusButton = document.getElementById('orderStatus');
+  var previousStatus = statusButton.value;
+  var status = '<%= order.status %>';
+  var url = '/auth/me/' + orderId + '/update/status/delete';
+  var request = new XMLHttpRequest();
+  request.open('POST', url);
+  request.setRequestHeader('Content-Type', 'application/json');
+  request.onreadystatechange = function() {
+    if (request.readyState === XMLHttpRequest.DONE) {
+      if (request.status === 200) {
+        console.log('Статус заказа успешно обновлен в базе данных');
+        statusButton.value = "Удалено";
+      } else {
+        console.error('Произошла ошибка при обновлении статуса заказа');
+      }
+    }
+  };
+  request.send(JSON.stringify({ status: status }));
+  }
+}
   </script>
 
+<h1>Спасибо за Ваш заказ!</h1>
+<div class="order-description">
+  <p>Завершением текущего заказа будет считаться его оплата.</p>
+</div>
 
-    <div class="order-description"><p>Приобретайте эксклюзивные книги и книжные наборы только у нас!</p></div> 
-    <% }) %>
-
+  <%})%>
+  
+  </tr></table>
+  <h1>Возвращайтесь за покупками!</h1>
     <% }else{ %>
       <h1><br>No Products<br></h1><br>
       <%}%>

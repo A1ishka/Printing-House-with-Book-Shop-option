@@ -15,8 +15,9 @@ body {
   h1 {
     font-family: Arial, sans-serif;
     margin-top: 1em;
+    margin-bottom: 1em;
   }
-  
+
   ul {
     list-style: none;
     padding-left: 0;
@@ -66,7 +67,7 @@ body {
     margin-left: 31em;
   }
 
-.update-preorder-data-button {
+.update-data-button {
   background-color: #ac33d4;
   border-radius: .2em;
   color: #000;
@@ -84,15 +85,23 @@ body {
   touch-action: manipulation;
 }
 
-.update-preorder-data-button:not(:disabled):hover,
-.update-preorder-data-button:not(:disabled):focus {
+.update-data-button:not(:disabled):hover,
+.update-data-button:not(:disabled):focus {
   outline: 0;
   background: #a045a0;
   box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
 }
 
-.update-preorder-data-button:disabled {
+.update-data-button:disabled {
   filter: saturate(0.2) opacity(0.5);
   -webkit-filter: saturate(0.2) opacity(0.5);
   cursor: not-allowed;
+}
+
+
+input[type="text"] {
+  margin-bottom: 10px;
+  border-radius: .7em;
+  height: 2em;
+  width: 10em;
 }
