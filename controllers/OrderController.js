@@ -46,7 +46,7 @@ export const showOrder = async (req, res) => {
 try {
   const orders = await OrderSchema.find({
     'user.userId': req.userId,
-    status: 'Формируется..' || 'К оплате'
+    status: 'Формируется..'&& 'К оплате'
   }).exec(); 
   const preOrderIds = orders.flatMap((order) => order.preOrder);
   const preOrders = await PreOrderSchema.find({ _id: { $in: preOrderIds } }).exec();
@@ -119,7 +119,7 @@ export const removeFromOrder =  async (req, res) => { //обработчик к�
 
 export const changeStatus =  async (req, res) => { //кнопка оплаты
 	try {
-    const findOrder = await OrderSchema.findById(req.body.orderId);
+    const findOrder = await OrderSchema.findById(req.params.orderId);
 	if (findOrder.status == "К оплате") findOrder.status = "Оплачено";
 	if (findOrder.status == "Формируется..") findOrder.status = "К оплате";
     findOrder.save();

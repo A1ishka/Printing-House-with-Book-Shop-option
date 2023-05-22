@@ -41,6 +41,7 @@ app.post('/auth/login', UserController.login);
 app.post('/auth/register', Validations.registerValidation, UserController.register);
 app.get('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.showOrder);
 app.post('/auth/me/:orderId/update', PreOrderController.updatePreOrder);
+app.post('/auth/me/:orderId/update/status', OrderController.changeStatus);
 
 app.get('/tags', BookController.getLastTags);
 app.get('/books', BookController.getAll);
@@ -52,6 +53,7 @@ app.patch('/books/:id', checkAuth, Validations.bookCreateValidation, handleValid
 
 app.post('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.preOrderCr);
 app.patch('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.updatePreOrder);
+
 app.delete('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.removeFromOrder);
 app.patch('/order-status', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.changeStatus);
 

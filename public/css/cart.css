@@ -50,18 +50,22 @@ body {
 
   tr {
     border: 4mm ridge rgba(161, 32, 161, .6);
-
   }
 
-  td{
-    min-width: 10em;
+  .book-image {
+    flex: 0 0 30%;
+    margin-right: 10em;
+  }
+  
+  .book-image img {
+    width: auto;
+    cursor: pointer;
   }
 
   .order-description{
     margin-left: 31em;
   }
 
-  
 .update-preorder-data-button {
   background-color: #ac33d4;
   border-radius: .2em;

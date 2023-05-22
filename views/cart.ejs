@@ -19,7 +19,7 @@
     <table><% preOrders.forEach(function(item, index) { %>
       <tr>
         <td>
-          <a href="/books/<%= item._id %>">
+          <a href="/books/<%= item.bookId %>">
             <div class="book-image">
                 <img src="<%= item.imageUrl %>" alt="<%= item.bookName %>">
             </div></a>
@@ -81,23 +81,45 @@
       <tr colspan="2">
         <td><p>Итоговая сумма: <span id="orderTotal"><%= preOrders.reduce((acc, item) => acc + (item.bookPrice * item.quantity), 0).toFixed(1) %> BYN</span></p></td>
       </tr>
-    </table>
 
-
-    <!--еще писать и писать-->
-    <% orders.forEach(function(order) { %>
+    <tr><td>
+    <% orders.forEach(function(order, index) { %>
     <ul>
-      <li><strong>Order Name:</strong></li>
+      <li><strong>Order Name:</strong></li><!--переделать поле для ввода-->
       <li><%= order.orderName %></li>
-      <li><strong>Status:</strong> <%= order.status %></li>
-      <ul>
-    <form action="/cart-delete-items" method="POST">
-      <input type="hidden" name="orderId" value="<%= order._id %>">
-      <button type="submit">Отчистить заказ</button>
+      <strong>Status:</strong> <input type="button" class="update-preorder-data-button" onclick="changeStatus()" value="<%= order.status %>">
+      <input type="hidden" name="orderId" value="<%= order._id %>" id="orderCancel">
+      <input type="button" class="update-preorder-data-button" onclick="changeStatus()" value="Удалить"> 
+      <!--стырить функционал кнопки выше, добавить статус "Удалено"-->
     </form>
   </ul>
-  <!--обрабатывать и обрабатывать-->
     
+   </td></tr></table>
+  <script>
+  function changeStatus() {
+  event.preventDefault();
+  var orderId = document.getElementById('orderCancel').value;
+
+  var status = '<%= order.status %>';
+  var url = '/auth/me/' + orderId + '/update/status';
+  var request = new XMLHttpRequest();
+  request.open('POST', url);
+  request.setRequestHeader('Content-Type', 'application/json');
+  request.onreadystatechange = function() {
+    if (request.readyState === XMLHttpRequest.DONE) {
+      if (request.status === 200) {
+        console.log('Статус заказа успешно обновлен в базе данных');
+      } else {
+        console.error('Произошла ошибка при обновлении статуса заказа');
+      }
+    }
+  };
+  request.send(JSON.stringify({ status: status }));
+}
+
+  </script>
+
+
     <div class="order-description"><p>Приобретайте эксклюзивные книги и книжные наборы только у нас!</p></div> 
     <% }) %>
 
