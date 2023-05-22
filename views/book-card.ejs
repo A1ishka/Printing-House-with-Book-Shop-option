@@ -41,13 +41,13 @@
         function toggleFullScreen() {
             if (!isFullScreen) {
                 if (bookImage.requestFullscreen) {
-                    bookImage.requestFullscreen();
+                    bookImage.requestFullscreen(); //chrome,
                 } else if (bookImage.mozRequestFullScreen) {
-                    bookImage.mozRequestFullScreen();
+                    bookImage.mozRequestFullScreen(); //mozila
                 } else if (bookImage.webkitRequestFullscreen) {
-                    bookImage.webkitRequestFullscreen();
+                    bookImage.webkitRequestFullscreen(); //safari, opera
                 } else if (bookImage.msRequestFullscreen) {
-                    bookImage.msRequestFullscreen();
+                    bookImage.msRequestFullscreen(); //microsoft edge
                 }
             } else {
                 if (document.exitFullscreen) {

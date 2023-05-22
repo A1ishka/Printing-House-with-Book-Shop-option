@@ -14,6 +14,10 @@
         </div>
           
             <div class="slideshow-container">
+                
+                <div class="mySlides fade">
+                    <video src="../images/2.mp4" autoplay></video>
+                </div>
                 <div class="mySlides fade">
                     <img src="../images/books_4.png" alt="Что-то пошло не так"> 
                 </div>
@@ -51,7 +55,7 @@
             slideIndex++;
             if (slideIndex > slides.length) {slideIndex = 1}
             slides[slideIndex-1].style.display = "block";
-            setTimeout(showSlides, 5000);
+            setTimeout(showSlides, 10000);
         }
     </script>
 </body>

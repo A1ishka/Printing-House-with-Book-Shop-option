@@ -23,6 +23,7 @@
   min-height: 20em;
   max-height: 30em;
   width: auto;
+  cursor: pointer;
 }
 
 .one-book-details {
