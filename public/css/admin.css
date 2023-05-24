@@ -1,11 +1,11 @@
 .button-div{
-    margin-top: 2em;
-    margin-bottom: 3em;
+    margin-top: 1em;
+    margin-bottom: 2em;
     margin-left: 15em;
 }
 
 .img-div img{
-    height: 28em;
+    height: 25em;
     width: 100%;
 }
 
@@ -39,4 +39,46 @@
   filter: saturate(0.2) opacity(0.5);
   -webkit-filter: saturate(0.2) opacity(0.5);
   cursor: not-allowed;
+}
+
+.get-users-button{
+  @extend .book-button;
+  width: 51.2em;
+}
+
+.get-orders-button{
+  @extend .book-button;
+  width: 51.2em;
+}
+
+body {
+  margin: 20px;
+}
+h1 {
+  color: #333;
+}
+.order-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.order-card p {
+  margin: 5px 0;
+}
+.delete-button {
+  background-color: #b63676;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  width: 10em;
+  margin-left: 1.5em;
+}
+.user-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.user-card p {
+  margin: 5px 0;
 }

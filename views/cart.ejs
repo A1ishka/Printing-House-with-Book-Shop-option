@@ -7,10 +7,7 @@
 </head>
 <body>    
     <%- include('parts/header.ejs') %>
-
     <% if (orders != undefined && orders != null) { %>
-    
-        
     <% var total = 0; %>
     <div id="orderList">
     <table><% preOrders.forEach(function(item, index) { %>
@@ -38,7 +35,6 @@
 
       <script>
         var preOrders = JSON.parse(document.getElementById('preOrdersData').value);
-      
         function updateQuantity(index, newQuantity) {
           console.log(index)
           preOrders[index].quantity = parseInt(newQuantity);
@@ -181,7 +177,6 @@ function changeStatusToDelete(){
 <div class="order-description">
   <p>Завершением текущего заказа будет считаться его оплата.</p>
 </div>
-
   <%})%>
   
   </tr></table>

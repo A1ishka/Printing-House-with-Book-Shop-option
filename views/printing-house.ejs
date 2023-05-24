@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Печать</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/admin.css">
+  </head>
+  <body>
+    <%- include('parts/header.ejs') %>
+    <h1>Заказы на печать</h1>
+    <% orders.forEach((order, index) => { %>
+      <div class="order-card">
+        <p><strong>Имя:</strong> <%= order.name %></p>
+        <p><strong>Телефон:</strong> <%= order.phone %></p>
+        <p><strong>Бумага:</strong> <%= JSON.stringify(order.image_select) %></p>
+        <p><strong>Обложка:</strong> <%= JSON.stringify(order.obl_type) %></p>
+        <p><strong>Срочность:</strong> <%= order.checked %></p>
+        <button class="delete-button" onclick="deleteOrder(<%= index %>)">Удалить</button>
+        <input type="hidden" id="order-id" value='<%- JSON.stringify(order) %>'>
+      </div>
+    <% }); %>
+
+    <script>
+      function deleteOrder(index) {
+        event.preventDefault();
+        if (confirm("Вы уверены, что хотите удалить данный заказ на печать?") == true){
+        const order = document.querySelector('#order-id').value;
+        const formData = {  order: order,  };
+        var path = '/orders-to-admin';
+        fetch(path, {
+          method: 'DELETE',
+          headers: {  'Content-Type': 'application/json',  },
+          body: JSON.stringify(formData) })
+          .then(response => {  if(response.ok) alert("Успешно!")})            
+          .catch(error => {  res.render('../500.ejs');})
+        }
+      };
+    </script>
+    
+    <%- include('parts/footer.ejs') %>
+  </body>
+</html>

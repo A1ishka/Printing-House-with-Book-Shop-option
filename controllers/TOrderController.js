@@ -130,5 +130,14 @@ export const createTOrder = async (req, res) => {
           }
         };
 
+        export const getPrintToAdmin = async (req, res) => {
+          try {
+            const orders = await TOrderSchema.find().exec(); 
+            res.render('printing-house', { orders });
+          } catch (err) {
+            console.log(err);
+            res.render('./errors/500.ejs');
+          }
+        };
 
     

@@ -91,21 +91,15 @@
             if (confirm("Вы уверены, что хотите удалить книгу?") == true){
             const bookId = document.querySelector('#book-id').value;
 
-            const formData = {
-                bookId: bookId,
-            };
+            const formData = {    bookId: bookId,  };
             var path = '/admin-books/' + bookId;
             fetch(path, {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: {  'Content-Type': 'application/json',  },
             body: JSON.stringify(formData) })
             .then(response => {
             if(response.ok) alert("Успешно обновлено!")})
-            .catch(error => {
-                res.render('../errors/500.ejs');
-            })}};
+            .catch(error => {  res.render('../errors/500.ejs'); })}};
     </script>
     </main>
     <%- include('parts/footer.ejs') %>

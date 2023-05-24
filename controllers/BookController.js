@@ -1,4 +1,4 @@
-import BookSchema from '../models/Book.js'; //bootстрап для выпадающего списка при создании заказа
+import BookSchema from '../models/Book.js';
 
 export const getLastTags = async (req, res) => {
   try {
@@ -16,7 +16,7 @@ export const getLastTags = async (req, res) => {
     res.json(uniqueTags); ////////////////'В последнее время использовались такие теги'
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -26,7 +26,7 @@ export const getAll = async (req, res) => {
     res.render('book-cards', { books });
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -36,7 +36,7 @@ export const getAllToAdmin = async (req, res) => {
     res.render('admin-books', { books });
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -49,7 +49,7 @@ export const getOne = async (req, res) => {
     res.render('book-card.ejs', { book });
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -60,7 +60,7 @@ export const getOneToAdmin = async (req, res) => {
     res.render('admin-book.ejs', { book });
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -71,7 +71,7 @@ export const remove = async (req, res) => {
     res.json({message: 'Книга была удалена'})
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -99,7 +99,7 @@ export const create = async (req, res) => {
     res.json(newBook);
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -126,7 +126,7 @@ export const update = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };
 
@@ -145,6 +145,6 @@ export const editParams = async (req, res) => {
 	  res.json({ success: true, });
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }
 };

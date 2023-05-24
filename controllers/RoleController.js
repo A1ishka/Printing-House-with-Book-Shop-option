@@ -26,13 +26,13 @@ export const isUser = function(roles){
     try {
       const user = await UserModel.findById(req.userId);
       if (!user) {
-        return res.render('./errors/300.ejs');
+        return res.render('./errors/403.ejs');
       }
       const { passwordHash, ...userData } = user._doc;
 
       let hasRole = false;      
       if (user.role == roles[0]) hasRole = true;
-      if (hasRole == false){ return res.render('./errors/300.ejs');}
+      if (hasRole == false){ return res.render('./errors/403.ejs');}
       next();
 
     } catch (err) {

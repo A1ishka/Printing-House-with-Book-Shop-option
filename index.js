@@ -1,9 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import { validationResult } from 'express-validator';
 import * as Validations from './validations/auth.js';
 
-import UserModel from './models/User.js';
 import checkAuth from './utils/checkAuth.js';
 import handleValidationErrors from './utils/handleValidationErrors.js';
 
@@ -33,8 +31,11 @@ app.get('/auth/login', (req, res) => { res.render('./parts/login.ejs'); });
 app.get('/about', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), (req, res) => { res.render('./admin_index.ejs'); }); //о компании
 app.get('/top-10-belkniga', (req, res) => { res.render('./top-10-belkniga.ejs'); });
 app.get('/print', checkAuth, RoleController.isUser(['USER', 'ADMIN']), (req, res) => { res.render('./print.ejs'); });
+
+app.get('/403', (req, res) => { res.render('./errors/403.ejs'); });
 app.get('/404', (req, res) => { res.render('./errors/404.ejs'); });
 app.get('/500', (req, res) => { res.render('./errors/500.ejs'); });
+
 app.get('/create-book', checkAuth, /*RoleController.isAdmin(['USER', 'ADMIN']),*/ (req, res) => { res.render('./book_creation.ejs'); });
 app.get('/admin', checkAuth, (req, res) => { res.render('./admin_index.ejs'); });
 
@@ -56,6 +57,8 @@ app.get('/books/:id', BookController.getOne);
 app.get('/admin-books/:id', BookController.getOneToAdmin);
 app.post('/admin-books/:id', BookController.editParams);
 
+app.get('/printing-house', TOrderController.getPrintToAdmin);
+
 app.post('/create-book', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), Validations.bookCreateValidation, BookController.create);
 app.delete('/admin-books/:id', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), BookController.remove);
 app.patch('/books/:id', checkAuth, Validations.bookCreateValidation, handleValidationErrors, BookController.update);
@@ -75,8 +78,6 @@ app.post('/calculate-price', TOrderController.countCost);
 
 app.post('/adminrolecheck', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), BookController.getAll);
 app.post('/userrolecheck', checkAuth, RoleController.isUser(['USER', 'ADMIN']), BookController.getLastTags);
-
-
 
 app.get('/search', (req, res) => {
   const searchQuery = req.query.q;
@@ -101,7 +102,6 @@ Book.find(filter)
     console.error('Ошибка при выполнении поискового запроса:', err);
     res.render('./errors/500.ejs');
   });
-
 });
 
 

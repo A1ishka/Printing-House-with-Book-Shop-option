@@ -53,17 +53,12 @@
 
   fetch("/create-book", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: {  "Content-Type": "application/json" },
     body: JSON.stringify(bookData)
   })
   .then(response => {
-    if (response.ok) {
-      alert("Книга успешно создана!");
-    } else {
-      alert("Ошибка при создании книги. Пожалуйста, попробуйте снова");
-    }
+    if (response.ok) {  alert("Книга успешно создана!");
+    } else { alert("Ошибка при создании книги. Пожалуйста, попробуйте снова");  }
   });
 };
   </script>

@@ -10,8 +10,6 @@
   <% if (results.length === 0) { %>
     <div class="no-results">Нет книг, удовлетворяющих параметрам поиска</div>
   <% } else { %>
-    
-
   <div id="searchResults">
     <div class="book-cards">
         <% results.forEach(function(result) { %>
@@ -39,7 +37,7 @@
       <input type="button" class="search-button clear-button" role="button" value="Сбросить">
     </a>
   </div>
-
+  
   <script src="../book.js"></script>
 </body>
 </html>

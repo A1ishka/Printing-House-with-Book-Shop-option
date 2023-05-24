@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>История</title>
+    <title>История заказов</title>
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/cart.css">
 </head>
 <body>    
     <%- include('parts/header.ejs') %>
-
     <% if (orders != undefined && orders != null) { %>
-           
     <% var total = 0; %>
     <div id="orderList">
     <table><% preOrders.forEach(function(item, index) { %>
@@ -29,19 +27,14 @@
           <br></td>
       </tr>
       <% }) %></div>
-
       <input type="hidden" id="preOrdersData" value='<%- JSON.stringify(preOrders) %>'>
-    
     <% orders.forEach(function(order, index) { %>
       <tr align="center">
         <td><div class="order-description-history"><p>Итоговая сумма: <span id="orderTotal"><%= preOrders.reduce((acc, item) => acc + (item.bookPrice * item.quantity), 0).toFixed(1) %> BYN</span></p></div></td>
       </tr>
     </ul>
-
 <h1>История заказов</h1>
-
   <%})%>
-  
 </table>
   <h1>Возвращайтесь за покупками!</h1>
     <% }else{ %>

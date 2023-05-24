@@ -91,7 +91,6 @@
                     <button class="count-button submit-button" role="button" id = "Submit" onclick="AddData()">Отправить</button>   
                     <button class="count-button clear-button" role="button" id="clearbtn" onclick="deleteTempData()">Отчистить</button>
                 </p>
-                
             </form>
         </div>
     </main>
@@ -100,13 +99,11 @@
     <script>
         const selectElement = document.getElementById("image_select");
         const imageElement = document.getElementById("selected-image");
-
         selectElement.addEventListener("change", (event) => {
         const selectedValue = event.target.value;
         const imagePath = `../images/${selectedValue}.jpg`;
         imageElement.src = imagePath;
         });
-
 
         function countPrice(){
             event.preventDefault();
@@ -115,12 +112,9 @@
             const pageCount = parseInt(document.querySelector('#bookName').textContent);
             const bookCount = document.querySelector('input[name="bookCount"]').value;
 
-
             fetch('/calculate-price', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json'  },
             body: JSON.stringify({ obl_type, paper_type, pageCount, bookCount })
             })
             .then(response => response.json())
@@ -216,18 +210,15 @@ function AddData(index){
 
         fetch('/t-order', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: {  'Content-Type': 'application/json',  },
             body: JSON.stringify(formData) })
             .then(response => {
-            if (response.ok) {
-                return response.json();
+            if (response.ok) {  return response.json();
             } else {
             throw new Error('Failed to fetch data');
             }})
             .catch(error => {
-                res.render('./500.ejs');
+                res.render('./errors/500.ejs');
             });
 
         localStorage.setItem("dataList", JSON.stringify(dataList));
@@ -242,11 +233,8 @@ function AddData(index){
 function deleteData(index){    
     event.preventDefault();
     var dataList;
-    if (localStorage.getItem("dataList") == null) {
-        dataList = [];
-    } else {
-        dataList = JSON.parse(localStorage.getItem("dataList"));
-    }
+    if (localStorage.getItem("dataList") == null) { dataList = [];
+    } else {  dataList = JSON.parse(localStorage.getItem("dataList"));  }
     dataList.splice(index,1);
     localStorage.setItem("dataList", JSON.stringify(dataList));
 }
