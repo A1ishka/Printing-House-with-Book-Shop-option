@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= book.name %></title>
+    <link rel="stylesheet" href="/css/admin-book.css">
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>    
+    <%- include('parts/header.ejs') %>
+    <main>
+    <div class="book-align">
+    <div class="book-one-card">
+        <table><tr><td>
+        <div class="one-book-image">
+            <img src="../<%= book.imageUrl %>" alt="<%= book.name %> cover" id="book-image">
+        </div></td>
+        <td><div class="one-book-details">
+            <h1><%= book.name %></h1>
+            <p class="author">Автор - <%= book.author %></p>
+            <textarea id="description" name="description" placeholder="Здесь может быть новое описание"></textarea>
+            <p class="tags"><strong>Тэги:</strong> <%= book.tags.join(', ') %></p>
+            <p class="page-count"><strong>Количество страниц:</strong> <%= book.pageCount %></p>
+            <p class="price"><strong>Цена/шт:</strong> <%= book.price.toFixed(2) %> BYN</p>
+                <input type="hidden" name="bookId" id="book-id" value="<%= book._id %>">
+                <h3><label for="quantity">Завоз/добавить экземпляров:
+                <input type="number" name="quantity" id="quantity" value="1" min="0" max="3000" size="5"></h3></label>
+                <p>
+                    <input type="button" class="admin-button save-button" role="button" onclick="addNewData()" value="Сохранить">
+                <br>   
+                    <input type="button" class="admin-button delete-button" role="button" onclick="deleteTheBook()" value="Удалить книгу">
+                </p>
+        </div>
+        </td></tr></table></div>
+    </div>
+    <script> 
+        const bookImage = document.getElementById('book-image');
+        let isFullScreen = false;
+        bookImage.addEventListener('click', toggleFullScreen);
+        function toggleFullScreen() {
+            if (!isFullScreen) {
+                if (bookImage.requestFullscreen) {
+                    bookImage.requestFullscreen(); //chrome,
+                } else if (bookImage.mozRequestFullScreen) {
+                    bookImage.mozRequestFullScreen(); //mozila
+                } else if (bookImage.webkitRequestFullscreen) {
+                    bookImage.webkitRequestFullscreen(); //safari, opera
+                } else if (bookImage.msRequestFullscreen) {
+                    bookImage.msRequestFullscreen(); //microsoft edge
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+            isFullScreen = !isFullScreen;
+        }
+
+        function addNewData(){
+            event.preventDefault();
+            const bookId = document.querySelector('#book-id').value;
+            const quantity = document.querySelector('#quantity').value;
+            const description = document.querySelector('#description').value;
+
+            const formData = {
+                bookId: bookId,
+                description: description,
+                quantity: quantity,
+            };
+            var path = '/admin-books/' + bookId;
+            fetch(path, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData) })
+            .then(response => {
+            if(response.ok) alert("Успешно обновлено!")})
+            .catch(error => {
+                res.render('../errors/500.ejs');
+            })};
+
+            function deleteTheBook(){
+            event.preventDefault();
+            
+            if (confirm("Вы уверены, что хотите удалить книгу?") == true){
+            const bookId = document.querySelector('#book-id').value;
+
+            const formData = {
+                bookId: bookId,
+            };
+            var path = '/admin-books/' + bookId;
+            fetch(path, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData) })
+            .then(response => {
+            if(response.ok) alert("Успешно обновлено!")})
+            .catch(error => {
+                res.render('../errors/500.ejs');
+            })}};
+    </script>
+    </main>
+    <%- include('parts/footer.ejs') %>
+</body>
+</html>

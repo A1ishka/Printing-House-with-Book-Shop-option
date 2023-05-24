@@ -33,9 +33,10 @@ app.get('/auth/login', (req, res) => { res.render('./parts/login.ejs'); });
 app.get('/about', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), (req, res) => { res.render('./admin_index.ejs'); }); //о компании
 app.get('/top-10-belkniga', (req, res) => { res.render('./top-10-belkniga.ejs'); });
 app.get('/print', checkAuth, RoleController.isUser(['USER', 'ADMIN']), (req, res) => { res.render('./print.ejs'); });
-app.get('/404', (req, res) => { res.render('./404.ejs'); });
-app.get('/500', (req, res) => { res.render('./500.ejs'); });
+app.get('/404', (req, res) => { res.render('./errors/404.ejs'); });
+app.get('/500', (req, res) => { res.render('./errors/500.ejs'); });
 app.get('/create-book', checkAuth, /*RoleController.isAdmin(['USER', 'ADMIN']),*/ (req, res) => { res.render('./book_creation.ejs'); });
+app.get('/admin', checkAuth, (req, res) => { res.render('./admin_index.ejs'); });
 
 app.post('/auth/login', UserController.login);
 app.post('/auth/register', Validations.registerValidation, UserController.register);
@@ -48,10 +49,14 @@ app.post('/auth/me/:orderId/delete', OrderController.removeFromOrder);
 
 app.get('/tags', BookController.getLastTags);
 app.get('/books', BookController.getAll);
+app.get('/admin-books', BookController.getAllToAdmin);
 app.get('/books/tags', BookController.getLastTags);
 app.get('/books/:id', BookController.getOne);
-app.post('/create-book', /*checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), */Validations.bookCreateValidation, BookController.create);
-app.delete('/books/:id', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), BookController.remove);
+app.get('/admin-books/:id', BookController.getOneToAdmin);
+app.post('/admin-books/:id', BookController.editParams);
+
+app.post('/create-book', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), Validations.bookCreateValidation, BookController.create);
+app.delete('/admin-books/:id', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), BookController.remove);
 app.patch('/books/:id', checkAuth, Validations.bookCreateValidation, handleValidationErrors, BookController.update);
 
 app.post('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.preOrderCr);

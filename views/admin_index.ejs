@@ -3,11 +3,13 @@
 <head>
     <title>О компании</title>
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>    
     <%- include('parts/header.ejs') %>
     <main>
-        <a href="/create-book"><input type="button" class="search-button clear-button" role="button" value="Добавить книгу"></a>
+        <a href="/create-book"><input type="button" class="book-button add-book-button" role="button" value="Добавить книгу"></a>
+        <a href="/admin-books"><input type="button" class="book-button get-book-button" role="button" value="Получить книги"></a>
     </main>
     <%- include('parts/footer.ejs') %>
 </body>

@@ -1,0 +1,31 @@
+.book-button{
+  background-color: #e552b2;
+  border-radius: 1em;
+  color: #000;
+  cursor: pointer;
+  padding: .8em 1.1em;
+  margin-top: 1em;
+  margin-left: 1em;
+  text-align: center;
+  transition: 200ms;
+  width: 25em;
+  box-sizing: border-box;
+  border: 0;
+  font-size: 1.2em;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.book-button:not(:disabled):hover,
+.book-button:not(:disabled):focus {
+  outline: 0;
+  background: #a045a0;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
+}
+
+.book-button:disabled {
+  filter: saturate(0.2) opacity(0.5);
+  -webkit-filter: saturate(0.2) opacity(0.5);
+  cursor: not-allowed;
+}

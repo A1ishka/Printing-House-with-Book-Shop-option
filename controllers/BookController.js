@@ -12,7 +12,6 @@ export const getLastTags = async (req, res) => {
     function onlyUnique(value, index, array) {
         return array.indexOf(value) === index;
     }
-
     var uniqueTags = tags.filter(onlyUnique);
     res.json(uniqueTags); ////////////////'В последнее время использовались такие теги'
   } catch (err) {
@@ -23,8 +22,7 @@ export const getLastTags = async (req, res) => {
 
 export const getAll = async (req, res) => {
   try {
-    const books = await BookSchema.find().exec();
-    //res.json(books); 
+    const books = await BookSchema.find().exec(); 
     res.render('book-cards', { books });
   } catch (err) {
     console.log(err);
@@ -32,16 +30,13 @@ export const getAll = async (req, res) => {
   }
 };
 
-export const getBookByName = async (req, res) => {
+export const getAllToAdmin = async (req, res) => {
   try {
-    const books = await BookSchema.find().exec();
-    //const books = await BookSchema.findOne({'name': req.param.name}).exec();
-    //const result = books.filter(book => (book.name === req.param.name));
-    const resullt = books.filter(book => (book.name.includes(req.params.name))); ///ни один из предложенных вариантов не дает результата
-    res.json(resullt); //что-то не так именно с поиском по имени!!!
+    const books = await BookSchema.find().exec(); 
+    res.render('admin-books', { books });
   } catch (err) {
     console.log(err);
-    res.render('./errors/500.ejs');
+    res.render('./500.ejs');
   }
 };
 
@@ -51,7 +46,18 @@ export const getOne = async (req, res) => {
     if (!book) {
       return res.render('./errors/404.ejs');
     }
-    res.render('book-card', { book });
+    res.render('book-card.ejs', { book });
+  } catch (err) {
+    console.log(err);
+    res.render('./errors/500.ejs');
+  }
+};
+
+export const getOneToAdmin = async (req, res) => {
+  try {
+    const book = await BookSchema.findOne({ _id: req.params.id });
+    if (!book) { return res.render('./errors/404.ejs'); }
+    res.render('admin-book.ejs', { book });
   } catch (err) {
     console.log(err);
     res.render('./errors/500.ejs');
@@ -60,12 +66,8 @@ export const getOne = async (req, res) => {
 
 export const remove = async (req, res) => {
   try {
-    const deletingBook = await BookSchema.findByIdAndDelete(req.params.id)
-    if (!deletingBook){
-      return res.status(500).json({
-        message: 'Не удалось удалить книгу!!!',
-      });
-    }
+    const deletingBook = await BookSchema.findByIdAndDelete(req.body.bookId)
+    if (!deletingBook) { return res.render('./errors/404.ejs');}
     res.json({message: 'Книга была удалена'})
   } catch (err) {
     console.log(err);
@@ -122,6 +124,25 @@ export const update = async (req, res) => {
     res.json({
       success: true,
     });
+  } catch (err) {
+    console.log(err);
+    res.render('./errors/500.ejs');
+  }
+};
+
+export const editParams = async (req, res) => {
+  try {
+    const findBook = await BookSchema.findById(req.body.bookId);
+    console.log(req.body.bookId, findBook);
+    console.log("----------------------");
+    console.log(req.body.description);
+    console.log(req.params.quantity);
+
+    if(req.body.description != '' && req.body.description != null) { findBook.description = req.body.description;}
+    
+    findBook.count = parseInt(findBook.count) + parseInt(req.body.quantity);
+    findBook.save();
+	  res.json({ success: true, });
   } catch (err) {
     console.log(err);
     res.render('./errors/500.ejs');

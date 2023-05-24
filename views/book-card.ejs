@@ -25,11 +25,7 @@
                 <input type="hidden" name="bookId" id="book-id" value="<%= book._id %>">
                 <h3><label for="quantity">Количество:</label></h3>
                 <input type="number" name="quantity" id="quantity" value="1" min="1" max="300">
-                <button class="count-button submit-button" role="button" onclick="addToCart()">Добавить в корзину</button> <!--на обработчик навешиваем "создать предзаказ"
-                потом записываем в документ этот предзаказ и сразу же генерируем заказ
-                при дополнительном добавлении продуктов также генерируем предзаказ + добавление в уже имеющийся заказ
-            
-                то есть обработчик этой кнопки создает предзаказ и проверяет, был ли уже заказ (если не было, создаем, иначе добавляем)-->
+                <button class="count-button submit-button" role="button" onclick="addToCart()">Добавить в корзину</button> 
             </form>
         </div>
         </td></tr></table></div>
@@ -85,7 +81,7 @@
             .then(response => {
             if(response.ok) alert("Успешно добавлено!")})
             .catch(error => {
-                res.render('./500.ejs');
+                res.render('../errors/500.ejs');
             })};
     </script>
     </main>

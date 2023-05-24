@@ -1,0 +1,112 @@
+.book-align {
+    align-items: center;
+    margin-top: 3em;
+    margin-bottom: 3em;
+    margin-left: 20em;
+  }
+  
+  .book-one-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .one-book-image {
+    flex: 0 0 30%;
+    margin-right: 10em;
+    
+  }
+  
+  .one-book-image img {
+    min-height: 20em;
+    max-height: 30em;
+    width: auto;
+    cursor: pointer;
+  }
+  
+  .one-book-details {
+    flex: 0 0 80%;
+    height: 30em;
+  }
+  
+  .one-book-details h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+  }
+  
+  .author {
+    font-size: 1.4rem;
+    font-style: italic;
+  }
+  
+  .author, .tags, .page-count, .price {
+    margin-bottom: .8em;
+  }
+  
+  .tags strong {
+    font-weight: bold;
+  }
+  
+  .price {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  form label {
+    margin-right: 10px;
+  }
+  
+  form input[type="number"] {
+    width: 30px;
+  }
+  
+  textarea {
+    width: 30em;
+    padding: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .admin-button{
+    background-color: #e552b2;
+    border-radius: 1em;
+    color: #000;
+    cursor: pointer;
+    padding: .8em 1.1em;
+    margin-top: 1em;
+    text-align: center;
+    transition: 200ms;
+    width: 30em;
+    box-sizing: border-box;
+    border: 0;
+    font-size: .7em;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  
+  .admin-button:not(:disabled):hover,
+  .admin-button:not(:disabled):focus {
+    outline: 0;
+    background: #a045a0;
+    box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
+  }
+  
+  .admin-button:disabled {
+    filter: saturate(0.2) opacity(0.5);
+    -webkit-filter: saturate(0.2) opacity(0.5);
+    cursor: not-allowed;
+  }
+
+  .delete-button{
+    @extend .admin-button;
+    background: #a812a8;
+  }
