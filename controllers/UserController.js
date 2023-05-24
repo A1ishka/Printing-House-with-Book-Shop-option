@@ -111,6 +111,29 @@ export const getMe = async (req, res) => {
   }
 };
 
+export const getUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find({
+      role: 'USER'
+    }).exec(); 
+    res.render('users-to-admin', { users });
+  } catch (err) {
+    console.log(err);
+    res.render('./500.ejs');
+  }
+};
+
+export const remove = async (req, res) => {
+  try {
+    const deletingUser = await UserModel.findByIdAndDelete(req.body.userId)
+    if (!deletingUser) { return res.render('./404.ejs');}
+    res.json({message: 'Успешно'})
+  } catch (err) {
+    console.log(err);
+    res.render('./500.ejs');
+  }
+};
+
 /*exports.signout = (req, res) => {
     res.clearCookie('t');
     res.json({ message: "Déconnexion réussie !" })

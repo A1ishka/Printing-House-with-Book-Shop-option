@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>История</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/cart.css">
+</head>
+<body>    
+    <%- include('parts/header.ejs') %>
+
+    <% if (orders != undefined && orders != null) { %>
+           
+    <% var total = 0; %>
+    <div id="orderList">
+    <table><% preOrders.forEach(function(item, index) { %>
+      <tr>
+        <td>
+          <a href="/books/<%= item.bookId %>">
+            <div class="book-image">
+                <img src="<%= item.imageUrl %>" alt="<%= item.bookName %>">
+            </div></a>
+        </td>
+        <td>
+          <p>Название книги: <i><%= item.bookName %></i></p>
+          <p>Цена за штуку: <i><%= item.bookPrice %> BYN</i></p>
+          <p><label for="quantity">Количество:   <%= item.quantity %></label></p>
+          <p><strong>Суммарно за предзаказ:</strong> <i id="total_<%= index %>"><%= item.bookPrice * item.quantity %> BYN</i></p>
+          <% total += item.bookPrice * item.quantity; %>
+          <br></td>
+      </tr>
+      <% }) %></div>
+
+      <input type="hidden" id="preOrdersData" value='<%- JSON.stringify(preOrders) %>'>
+    
+    <% orders.forEach(function(order, index) { %>
+      <tr align="center">
+        <td><div class="order-description-history"><p>Итоговая сумма: <span id="orderTotal"><%= preOrders.reduce((acc, item) => acc + (item.bookPrice * item.quantity), 0).toFixed(1) %> BYN</span></p></div></td>
+      </tr>
+    </ul>
+
+<h1>История заказов</h1>
+
+  <%})%>
+  
+</table>
+  <h1>Возвращайтесь за покупками!</h1>
+    <% }else{ %>
+      <h1><br>No Products<br></h1><br>
+      <%}%>
+    <%- include('parts/footer.ejs') %>
+</body>
+</html>

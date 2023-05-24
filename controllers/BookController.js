@@ -44,34 +44,34 @@ export const getOne = async (req, res) => {
   try {
     const book = await BookSchema.findOne({ _id: req.params.id });
     if (!book) {
-      return res.render('./errors/404.ejs');
+      return res.render('./404.ejs');
     }
     res.render('book-card.ejs', { book });
   } catch (err) {
     console.log(err);
-    res.render('./errors/500.ejs');
+    res.render('./500.ejs');
   }
 };
 
 export const getOneToAdmin = async (req, res) => {
   try {
     const book = await BookSchema.findOne({ _id: req.params.id });
-    if (!book) { return res.render('./errors/404.ejs'); }
+    if (!book) { return res.render('./404.ejs'); }
     res.render('admin-book.ejs', { book });
   } catch (err) {
     console.log(err);
-    res.render('./errors/500.ejs');
+    res.render('./500.ejs');
   }
 };
 
 export const remove = async (req, res) => {
   try {
     const deletingBook = await BookSchema.findByIdAndDelete(req.body.bookId)
-    if (!deletingBook) { return res.render('./errors/404.ejs');}
+    if (!deletingBook) { return res.render('./404.ejs');}
     res.json({message: 'Книга была удалена'})
   } catch (err) {
     console.log(err);
-    res.render('./errors/500.ejs');
+    res.render('./500.ejs');
   }
 };
 
@@ -99,7 +99,7 @@ export const create = async (req, res) => {
     res.json(newBook);
   } catch (err) {
     console.log(err);
-    res.render('./errors/500.ejs');
+    res.render('./500.ejs');
   }
 };
 
@@ -126,7 +126,7 @@ export const update = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.render('./errors/500.ejs');
+    res.render('./500.ejs');
   }
 };
 
@@ -145,6 +145,6 @@ export const editParams = async (req, res) => {
 	  res.json({ success: true, });
   } catch (err) {
     console.log(err);
-    res.render('./errors/500.ejs');
+    res.render('./500.ejs');
   }
 };

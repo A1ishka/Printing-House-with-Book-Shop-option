@@ -100,13 +100,24 @@ body {
   cursor: not-allowed;
 }
 
+.order-description-history{
+  margin-left: 5em;
+}
+
 .order{
   @extend .update-data-button;
   width: 10em;
 }
+
 .preorder{
   @extend .update-data-button;
   width: 12em;
+  font-size: medium;
+}
+
+.history{
+  @extend .update-data-button;
+  width: 20em;
   font-size: medium;
 }
 
@@ -115,4 +126,9 @@ input[type="text"] {
   border-radius: .7em;
   height: 2em;
   width: 10em;
+}
+
+.history-button{
+  margin-left: 35em;
+  margin-bottom: 2em;
 }

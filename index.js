@@ -41,6 +41,7 @@ app.get('/admin', checkAuth, (req, res) => { res.render('./admin_index.ejs'); })
 app.post('/auth/login', UserController.login);
 app.post('/auth/register', Validations.registerValidation, UserController.register);
 app.get('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.showOrder);
+app.get('/cart-history', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.showSavedOrder);
 app.post('/auth/me/:orderId/update', PreOrderController.updatePreOrder);
 app.post('/auth/me/:orderId/update/status', OrderController.changeStatus);
 app.post('/auth/me/:orderId/update/status/delete', OrderController.changeStatusToDelete);
@@ -61,6 +62,9 @@ app.patch('/books/:id', checkAuth, Validations.bookCreateValidation, handleValid
 
 app.post('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.preOrderCr);
 app.patch('/auth/me', checkAuth, RoleController.isUser(['USER', 'ADMIN']), PreOrderController.updatePreOrder);
+
+app.get('/users', UserController.getUsers);
+app.delete('/users', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), UserController.remove);
 
 app.delete('/order', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.removeFromOrder);
 app.patch('/order-status', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.changeStatus);

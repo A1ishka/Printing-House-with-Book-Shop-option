@@ -54,6 +54,20 @@ try {
   res.render('./500.ejs');
 }};
 
+export const showSavedOrder = async (req, res) => {
+  try {
+    const orders = await OrderSchema.find({
+      'user.userId': req.userId,
+      status: 'Оплачено'
+    }).exec(); 
+    const preOrderIds = orders.flatMap((order) => order.preOrder);
+    const preOrders = await PreOrderSchema.find({ _id: { $in: preOrderIds } }).exec();
+    res.render('cart-history', { orders: orders, preOrders: preOrders });
+  } catch (err) {
+    console.log(err);
+    res.render('./500.ejs');
+  }};
+
 async function createOrder (preorderData, user){
 	try {
     let PreOrder = []
@@ -66,17 +80,6 @@ async function createOrder (preorderData, user){
 	return newOrder;
 } catch (err) { throw err; }
 };
-
-/*
-итак, что нужно еще сделать:
--нормально пофиксить проверку на повторения и поиндексное схватывание преордеров
-(а то обновляет исключительно первый вне зависимости от пользовательского выбора)
--удаление преордеров из заказа
--оформление адреса доставки и тд 
--закончить с оформлением страницы (прикол с NOproduct работает ли)
-*/
-
-
 
 async function addToOrder (preorderData, order){
 	try {
@@ -120,7 +123,7 @@ export const changeStatus =  async (req, res) => { //кнопка оплаты
     res.render('./errors/500.ejs');}
 };
 
-export const changeStatusToDelete =  async (req, res) => { //кнопка оплаты
+export const changeStatusToDelete =  async (req, res) => {
 	try {
     const findOrder = await OrderSchema.findById(req.params.orderId);
 	  findOrder.status = "Удалено";
