@@ -8,9 +8,15 @@
 <body>    
     <%- include('parts/header.ejs') %>
     <main>
+    <div class="img-div"><img src="../images/books_13.png" alt="(())"></div>
+    <div class="button-div">
         <a href="/create-book"><input type="button" class="book-button add-book-button" role="button" value="Добавить книгу"></a>
         <a href="/admin-books"><input type="button" class="book-button get-book-button" role="button" value="Получить книги"></a>
+    </div>
     </main>
     <%- include('parts/footer.ejs') %>
 </body>
 </html>
+
+<!--организовать получение заказов админом (мб их удаление и редактирование)-->
+<!--показывать без аккаунтов, а потом создавать прямо на месте, чтобы не возникало ролевой путаницы-->

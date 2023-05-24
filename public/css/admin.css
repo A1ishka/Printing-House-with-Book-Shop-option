@@ -1,5 +1,16 @@
+.button-div{
+    margin-top: 2em;
+    margin-bottom: 3em;
+    margin-left: 15em;
+}
+
+.img-div img{
+    height: 28em;
+    width: 100%;
+}
+
 .book-button{
-  background-color: #e552b2;
+  background-color: #dc1079;
   border-radius: 1em;
   color: #000;
   cursor: pointer;
@@ -20,7 +31,7 @@
 .book-button:not(:disabled):hover,
 .book-button:not(:disabled):focus {
   outline: 0;
-  background: #a045a0;
+  background: #04cdff;
   box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
 }
 

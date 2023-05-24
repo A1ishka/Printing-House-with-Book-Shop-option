@@ -6,6 +6,22 @@
     <link rel="stylesheet" href="../css/reg_login.css">
 </head>
 <body>
+
+<script>
+    function deleteAllCookies() {
+  var cookies = document.cookie.split(";");
+
+  for (var i = 0; i < cookies.length; i++) {
+    var cookie = cookies[i];
+    var eqPos = cookie.indexOf("=");
+    var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+  }
+  deleteAllCookies();
+}
+
+</script>
+
     <div class="icon-img"><img src="../images/user-icon.png" alt="user-icon" width="10%" height="auto"></div>
     <h1 class="login-h">Вход в аккаунт</h1>
     <form class="form-signin" role="form" method="POST" action="/auth/login">
