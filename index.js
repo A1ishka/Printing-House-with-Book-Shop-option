@@ -25,6 +25,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.set('view engine', 'ejs');
 
+app.get('/nouser', (req, res) => { res.render('./nouser.ejs'); });
 app.get('/', (req, res) => { res.render('./index.ejs'); });
 app.get('/auth/register', (req, res) => { res.render('./parts/registration.ejs'); });
 app.get('/auth/login', (req, res) => { res.render('./parts/login.ejs'); });
@@ -59,6 +60,7 @@ app.post('/admin-books/:id', BookController.editParams);
 
 app.get('/printing-house', TOrderController.getPrintToAdmin);
 app.get('/payment', (req, res) => { res.render('./payment.ejs'); });
+app.post('/payment', OrderController.showPayment);
 app.post('/auth/me/paid', OrderController.changeStatusToPaid);
 
 app.post('/create-book', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), Validations.bookCreateValidation, BookController.create);

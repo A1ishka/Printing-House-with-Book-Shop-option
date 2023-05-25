@@ -121,6 +121,14 @@ body {
   font-size: medium;
 }
 
+.payment{
+  @extend .update-data-button;
+  width: 15em;
+  font-size: medium;
+  margin-top: .7em;
+  margin-left: 3em;
+}
+
 input[type="text"] {
   margin-bottom: 10px;
   border-radius: .7em;

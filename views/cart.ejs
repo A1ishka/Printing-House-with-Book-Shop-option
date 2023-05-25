@@ -100,9 +100,9 @@
       <input type="text" id="Adress" value="<%= order.Adress %>" placeholder="<%= order.Adress %>" >
       <input type="button" class="update-data-button" onclick="saveOrderAdress()" value="Сохранить"> </li>
       <strong>Статус заказа:</strong> <input type="button" class="update-data-button order" onclick="changeStatus()" value="<%= order.status %>" id="orderStatus">
+      <input type="button" class="update-data-button order" onclick="changeStatusToDelete()" value="Удалить"> 
       <div id="pay-button"></div>
       <input type="hidden" name="orderId" value="<%= order._id %>" id="orderCancel">
-      <input type="button" class="update-data-button order" onclick="changeStatusToDelete()" value="Удалить"> 
     </ul></td>
     
   <script>
@@ -142,7 +142,7 @@
 	      if (previousStatus == "Формируется..") statusButton.value = "К оплате";
         if (previousStatus == "К оплате") {
           const payButton = document.getElementById('pay-button');
-          payButton.innerHTML = '<input type="button" class="payment-button" role="button" onclick="PAY()" value="Оплатить">';
+          payButton.innerHTML = '<a href="/payment"><input type="button" class="update-data-button payment" role="button" value="Оплатить"></a>';
         }
       } else {
         console.error('Произошла ошибка при обновлении статуса заказа');
@@ -152,8 +152,26 @@
   request.send(JSON.stringify({ status: status }));
 }
 function PAY(){
-  //changeStatusToPaid + обработать кнопочку
-}
+  event.preventDefault();
+  var order = document.getElementById('orderCancel').value;
+  var totalSum = parseInt(document.getElementById('orderTotal').value);
+  var url = '/payment';
+  const formData = {
+    order: order,
+    totalSum: totalSum,
+  };
+  fetch('/payment', {
+    method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData) })
+            .then(response => {
+            if(response.ok) alert("Успешно!")})
+            .catch(error => {
+                res.render('../errors/500.ejs');
+            })};
+
 function changeStatusToDelete(){
   event.preventDefault();
   if (confirm("Вы уверены, что хотите удалить заказ?") == true){

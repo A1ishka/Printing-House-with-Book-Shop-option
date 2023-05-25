@@ -40,20 +40,21 @@
             <label>CVC:</label>
             <input class="ccv" type="text" placeholder="CVC" maxlength="3" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
             <button class="buy" onclick="sendPaymentStatus()">Оплатить</button>
+            <div class="orderId"></div>
           </div>
         </div>
 
-
-
 <script>
 function sendPaymentStatus() {
+  var orderId = document.getElementById('orderData').value;
   fetch('auth/me/paid', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      status: 'Оплачено'
+      status: 'Оплачено',
+      orderId: orderId
     })
   })
   .then(response => {
@@ -66,6 +67,11 @@ function sendPaymentStatus() {
   .catch(error => {
     console.error('Произошла ошибка при отправке запроса:', error);
   });
+}
+function a(){
+const payButton = document.getElementById('orderId');
+const order = "order"
+payButton.innerHTML = '<input type="hidden" name="orderId" value=order id="orderData">';
 }
 </script>
 

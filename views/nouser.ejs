@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Главная</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <script>
+        function deleteAllCookies() {
+          var cookies = document.cookie.split(";");
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i];
+            var eqPos = cookie.indexOf("=");
+            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+          }
+        }
+        deleteAllCookies();
+        </script>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="navbar__logo">Главная</a>
+            <a href="/books" class="navbar__link">Книги</a>
+            <a href="/print" class="navbar__link">Заказ печати</a>        
+            <a href="/about" class="navbar__link">О нас</a>
+            <a href="/top-10-belkniga" class="navbar__link">Топ-10</a>
+        </nav>
+        <nav class="nav_login">
+            <a href="/auth/me" class="navbar__link">Корзина</a>
+            <a href="/auth/login" class="navbar__link">Войти</a>
+            <a href="/auth/register" class="navbar__link">Зарегистрироваться</a>
+        </nav>
+    </header>
+    <main>
+        <div class="gr-text">
+            <h1>Типография и эксклюзивная классика</h1>
+            <p>Мы отличаемся от других книжных издательств высоким уровнем специализации на одной книжной серии,<br> уделяя огромное внимание <i>мельчайшим деталям</i> и дополнительным материалам.</p>
+            <p>А также поддерживаем начинающих авторов, <i>осуществляя их мечты</i> в своей типографии</p>
+        </div>
+          
+            <div class="slideshow-container">
+                <div class="mySlides fade">
+                    <video src="../images/video.mp4" autoplay></video>
+                </div>
+                <div class="mySlides fade">
+                    <img src="../images/books_1.png" alt="Что-то пошло не так"> 
+                </div>
+                <div class="mySlides fade">
+                    <img src="../images/books_2.png" alt="Что-то пошло не так">
+                </div>
+                <div class="mySlides fade">
+                    <img src="../images/books_3.png" alt="Что-то пошло не так">
+                </div>
+                <div class="mySlides fade">
+                    <img src="../images/books_4.png" alt="Что-то пошло не так">
+                </div>
+                <div class="mySlides fade">
+                    <img src="../images/books_5.png" alt="Что-то пошло не так">
+                </div>
+                <div class="button-container">
+                    <a href="/books"><input type="button" class="transparent-button" role="button" value="В каталог"></a>
+                </div>
+            </div>
+            <div class="space"></div>
+        </main>
+               
+    <%- include('parts/footer.ejs') %>
+
+    <script>
+        var slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none"; }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}
+            slides[slideIndex-1].style.display = "block";
+            setTimeout(showSlides, 10000);
+        }
+    </script>
+</body>
+</html>

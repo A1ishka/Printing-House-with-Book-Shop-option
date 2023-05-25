@@ -44,7 +44,6 @@ export const showOrder = async (req, res) => {
 try {
   const orders = await OrderSchema.find({
     'user.userId': req.userId,
-    status: 'Формируется..' && 'К оплате'
   }).exec(); 
   const preOrderIds = orders.flatMap((order) => order.preOrder);
   const preOrders = await PreOrderSchema.find({ _id: { $in: preOrderIds } }).exec();
@@ -53,6 +52,16 @@ try {
   console.log(err);
   res.render('./500.ejs');
 }};
+
+export const showPayment = async (req, res) => {
+  try {
+    const order = req.body.order;
+    const totalSum = req.body.totalSum;
+    res.render('./payment.ejs', { order: order, totalSum: totalSum });
+  } catch (err) {
+    console.log(err);
+    res.render('./500.ejs');
+  }};
 
 export const showSavedOrder = async (req, res) => {
   try {
@@ -135,7 +144,8 @@ export const changeStatusToDelete =  async (req, res) => {
 
 export const changeStatusToPaid =  async (req, res) => {
 	try {
-    const findOrder = await OrderSchema.findById(req.params.orderId);
+    const findOrder = await OrderSchema.findById(req.body.orderId);
+    console.log(req.body.orderId, findOrder);
 	  findOrder.status = "Оплачено";
     findOrder.save();
     res.render('cart', { PAIDstatus: findOrder.status, order: findOrder });
