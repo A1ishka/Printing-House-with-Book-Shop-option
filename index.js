@@ -58,6 +58,8 @@ app.get('/admin-books/:id', BookController.getOneToAdmin);
 app.post('/admin-books/:id', BookController.editParams);
 
 app.get('/printing-house', TOrderController.getPrintToAdmin);
+app.get('/payment', (req, res) => { res.render('./payment.ejs'); });
+app.post('/auth/me/paid', OrderController.changeStatusToPaid);
 
 app.post('/create-book', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), Validations.bookCreateValidation, BookController.create);
 app.delete('/admin-books/:id', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), BookController.remove);

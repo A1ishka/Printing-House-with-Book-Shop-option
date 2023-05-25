@@ -100,6 +100,7 @@
       <input type="text" id="Adress" value="<%= order.Adress %>" placeholder="<%= order.Adress %>" >
       <input type="button" class="update-data-button" onclick="saveOrderAdress()" value="Сохранить"> </li>
       <strong>Статус заказа:</strong> <input type="button" class="update-data-button order" onclick="changeStatus()" value="<%= order.status %>" id="orderStatus">
+      <div id="pay-button"></div>
       <input type="hidden" name="orderId" value="<%= order._id %>" id="orderCancel">
       <input type="button" class="update-data-button order" onclick="changeStatusToDelete()" value="Удалить"> 
     </ul></td>
@@ -138,14 +139,20 @@
     if (request.readyState === XMLHttpRequest.DONE) {
       if (request.status === 200) {
         console.log('Статус заказа успешно обновлен в базе данных');
-        if (previousStatus == "К оплате") statusButton.value = "Оплачено";
 	      if (previousStatus == "Формируется..") statusButton.value = "К оплате";
+        if (previousStatus == "К оплате") {
+          const payButton = document.getElementById('pay-button');
+          payButton.innerHTML = '<input type="button" class="payment-button" role="button" onclick="PAY()" value="Оплатить">';
+        }
       } else {
         console.error('Произошла ошибка при обновлении статуса заказа');
       }
     }
   };
   request.send(JSON.stringify({ status: status }));
+}
+function PAY(){
+  //changeStatusToPaid + обработать кнопочку
 }
 function changeStatusToDelete(){
   event.preventDefault();

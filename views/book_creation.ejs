@@ -8,18 +8,13 @@
   <form class="form-creation">
     <label for="name">Название:</label>
     <input type="text" id="name" name="name" placeholder="Трудно быть богом" required>
-
     <label for="description">Описание:</label>
     <textarea id="description" name="description" placeholder="Увлекательная, полная драматизма история жизни, любви и приключений 'дона Руматы' из королевства Арканар на далекой планете – рыцаря с двумя мечами, под именем которого скрывается резидент с планеты Земля ХХII века Антон." required></textarea>
-
     <label for="tags">Теги (через запятую):</label>
-    <input type="text" id="tags" name="tags" placeholder="Мистика, Фантастика">
-
+    <input type="text" id="tags" name="tags" placeholder="Мистика, Фантастика" required>
     <label for="pageCount"><i>спасите</i> Количество страниц:   <input type="number" id="pageCount" name="pageCount" placeholder="300" min="1" max="10000"></label>
-
     <label for="author">Автор:</label>
     <input type="text" id="author" name="author" placeholder="Братья Стругацкие" required>
-
     <label for="price"><i>нет</i>Цена:   <input type="number" id="price" name="price" placeholder="10" min="1" max="100" required><i>нет</i>Количество:   <input type="number" id="count" name="count" value="100" min="1" max="100000"></label>
     <br>
     <label for="imageUrl">URL изображения:</label>
@@ -29,8 +24,8 @@
     <a href="/"><input type="button" value="На главную" class="submit-button back" role="button"></a>
   </form>
   <script>
-    function createAbook(){
-    event.preventDefault();
+  function createAbook(){
+  event.preventDefault();
   const name = document.getElementById("name").value;
   const description = document.getElementById("description").value;
   const tags = document.getElementById("tags").value.split(", ");

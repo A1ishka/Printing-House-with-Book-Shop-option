@@ -44,7 +44,7 @@ export const showOrder = async (req, res) => {
 try {
   const orders = await OrderSchema.find({
     'user.userId': req.userId,
-    status: 'Формируется..' || 'К оплате'
+    status: 'Формируется..' && 'К оплате'
   }).exec(); 
   const preOrderIds = orders.flatMap((order) => order.preOrder);
   const preOrders = await PreOrderSchema.find({ _id: { $in: preOrderIds } }).exec();
@@ -114,7 +114,6 @@ export const removeFromOrder =  async (req, res) => {
 export const changeStatus =  async (req, res) => { //кнопка оплаты
 	try {
     const findOrder = await OrderSchema.findById(req.params.orderId);
-	if (findOrder.status == "К оплате") findOrder.status = "Оплачено";
 	if (findOrder.status == "Формируется..") findOrder.status = "К оплате";
     findOrder.save();
 	res.json({ success: true, });
@@ -129,6 +128,17 @@ export const changeStatusToDelete =  async (req, res) => {
 	  findOrder.status = "Удалено";
     findOrder.save();
 	res.json({ success: true, });
+} catch (err) {
+	console.log(err);
+    res.render('./errors/500.ejs');}
+};
+
+export const changeStatusToPaid =  async (req, res) => {
+	try {
+    const findOrder = await OrderSchema.findById(req.params.orderId);
+	  findOrder.status = "Оплачено";
+    findOrder.save();
+    res.render('cart', { PAIDstatus: findOrder.status });
 } catch (err) {
 	console.log(err);
     res.render('./errors/500.ejs');}

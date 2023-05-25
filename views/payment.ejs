@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Платежная система</title>
+  
+  <link rel="stylesheet" href="/css/payment.css">
+</head>
+<body>
+    <div class="tips">
+        Payment card number: (4) VISA, (51 -> 55) MasterCard, (36-38-39) DinersClub, (34-37) American Express, (65) Discover, (5019) dankort
+    </div>
+        
+        <div class="container">
+          <div class="col1">
+            <div class="card">
+              <div class="front">
+                <div class="type">
+                  <img class="bankid"/>
+                </div>
+                <span class="chip"></span>
+                <span class="card_number">&#x25CF;&#x25CF;&#x25CF;&#x25CF; &#x25CF;&#x25CF;&#x25CF;&#x25CF; &#x25CF;&#x25CF;&#x25CF;&#x25CF; &#x25CF;&#x25CF;&#x25CF;&#x25CF; </span>
+                <div class="date"><span class="date_value">MM / YYYY</span></div>
+                <span class="fullname">FULL NAME</span>
+              </div>
+              <div class="back">
+                <div class="magnetic"></div>
+                <div class="bar"></div>
+                <span class="seccode">&#x25CF;&#x25CF;&#x25CF;</span>
+                <span class="chip"></span><span class="disclaimer">This card is property of Random Bank of Random corporation. <br> If found please return to Random Bank of Random corporation - 21968 Paris, Verdi Street, 34 </span>
+              </div>
+            </div>
+          </div>
+          <div class="col2">
+            <label>Номер платежной карты:</label>
+            <input class="number" type="text" ng-model="ncard" maxlength="19" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
+            <label>Держатель карты:</label>
+            <input class="inputname" type="text" placeholder=""/>
+            <label>Срок действия:</label>
+            <input class="expire" type="text" placeholder="MM / YYYY"/>
+            <label>CVC:</label>
+            <input class="ccv" type="text" placeholder="CVC" maxlength="3" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
+            <button class="buy" onclick="sendPaymentStatus()">Оплатить</button>
+          </div>
+        </div>
+
+
+
+<script>
+function sendPaymentStatus() {
+  fetch('auth/me/paid', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      status: 'Оплачено'
+    })
+  })
+  .then(response => {
+    if (response.ok) {
+      console.log('Запрос успешно отправлен.');
+    } else {
+      console.error('Произошла ошибка при отправке запроса.');
+    }
+  })
+  .catch(error => {
+    console.error('Произошла ошибка при отправке запроса:', error);
+  });
+}
+</script>
+
+
+<script>
+// 4: VISA, 51 -> 55: MasterCard, 36-38-39: DinersClub, 34-37: American Express, 65: Discover, 5019: dankort
+document.addEventListener("DOMContentLoaded", function() {
+
+var cards = [{
+  nome: "mastercard",
+  colore: "#0061A8",
+  src: "https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png"
+}, {
+  nome: "visa",
+  colore: "#E2CB38",
+  src: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2000px-Visa_Inc._logo.svg.png"
+}, {
+  nome: "dinersclub",
+  colore: "#888",
+  src: "http://www.worldsultimatetravels.com/wp-content/uploads/2016/07/Diners-Club-Logo-1920x512.png"
+}, {
+  nome: "americanExpress",
+  colore: "#108168",
+  src: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/American_Express_logo.svg/600px-American_Express_logo.svg.png"
+}, {
+  nome: "discover",
+  colore: "#86B8CF",
+  src: "https://lendedu.com/wp-content/uploads/2016/03/discover-it-for-students-credit-card.jpg"
+}, {
+  nome: "dankort",
+  colore: "#0061A8",
+  src: "https://upload.wikimedia.org/wikipedia/commons/5/51/Dankort_logo.png"
+}];
+
+var month = 0;
+var html = document.getElementsByTagName('html')[0];
+var number = "";
+
+var selected_card = -1;
+
+document.addEventListener("click", function(e) {
+  if(!e.target.classList.contains("ccv") || !e.target.closest(".ccv")) {
+    document.querySelector(".card").style.transform = "rotatey(0deg)";
+    document.querySelector(".seccode").style.color = "var(--text-color)";
+  }
+  if(!e.target.classList.contains("expire") || !e.target.closest(".expire")) {
+    document.querySelector(".date_value").style.color = "var(--text-color)";
+  }
+  if(!e.target.classList.contains("number") || !e.target.closest(".number")) {
+    document.querySelector(".card_number").style.color = "var(--text-color)";
+  }
+  if(!e.target.classList.contains("inputname") || !e.target.closest(".inputname")) {
+    document.querySelector(".fullname").style.color = "var(--text-color)";
+  }
+});
+
+document.querySelector(".number").addEventListener("keyup", function(event) {
+  document.querySelector(".card_number").textContent = this.value;
+  number = this.value;
+  
+  if(parseInt(number.substring(0, 2)) > 50 && parseInt(number.substring(0, 2)) < 56){
+    selected_card = 0;
+  } else if(parseInt(number.substring(0, 1)) == 4) {
+    selected_card = 1;  
+  } else if(parseInt(number.substring(0, 2)) == 36 || parseInt(number.substring(0, 2)) == 38 || parseInt(number.substring(0, 2)) == 39) {
+    selected_card = 2;     
+  } else if(parseInt(number.substring(0, 2)) == 34 || parseInt(number.substring(0, 2)) == 37) {
+    selected_card = 3; 
+  } else if(parseInt(number.substring(0, 2)) == 65) {
+    selected_card = 4; 
+  } else if(parseInt(number.substring(0, 4)) == 5019) {
+    selected_card = 5; 
+  } else {
+    selected_card = -1; 
+  }
+  
+  if(selected_card != -1) {
+    html.style.setProperty("--card-color", cards[selected_card].colore);  
+    document.querySelector(".bankid").src = cards[selected_card].src;
+    document.querySelector(".bankid").style.display = "block";
+  } else {
+    html.style.setProperty("--card-color", "#cecece");
+    document.querySelector(".bankid").src = "";
+    document.querySelector(".bankid").style.display = "none";
+  }
+  
+  if(document.querySelector(".card_number").textContent.length === 0) {
+    document.querySelector(".card_number").innerHTML = "&#x25CF;&#x25CF;&#x25CF;&#x25CF; &#x25CF;&#x25CF;&#x25CF;&#x25CF; &#x25CF;&#x25CF;&#x25CF;&#x25CF; &#x25CF;&#x25CF;&#x25CF;&#x25CF;";
+  }
+});
+
+document.querySelector(".number").addEventListener("focus", function() {
+  document.querySelector(".card_number").style.color = "white";
+});
+
+document.querySelector(".number").addEventListener("keydown", function(event) {
+  document.querySelector(".card_number").textContent = this.value;
+  
+  if(event.key >= 0 && event.key <= 9){
+    if(this.value.length === 4 || this.value.length === 9 || this.value.length === 14){
+      this.value += " ";
+    }
+  }
+});
+
+document.querySelector(".inputname").addEventListener("keyup", function() {
+  document.querySelector(".fullname").textContent = this.value;
+
+  if(document.querySelector(".inputname").value.length === 0) {
+      document.querySelector(".fullname").textContent = "FULL NAME";
+  }
+});
+
+document.querySelector(".inputname").addEventListener("focus", function() {
+  document.querySelector(".fullname").style.color = "white";
+});
+
+document.querySelector(".ccv").addEventListener("focus", function() {
+  document.querySelector(".card").style.transform = "rotatey(180deg)";
+  document.querySelector(".seccode").style.color = "white";
+});
+
+document.querySelector(".ccv").addEventListener("keyup", function() {
+  document.querySelector(".seccode").textContent = this.value;
+  
+  if(this.value.length === 0) {
+    document.querySelector(".seccode").innerHTML = "&#x25CF;&#x25CF;&#x25CF;";
+  }
+});
+
+document.querySelector(".ccv").addEventListener("focusout", function() {
+  document.querySelector(".card").style.transform = "rotatey(0deg)";
+  document.querySelector(".seccode").style.color = "var(--text-color)";
+});
+
+document.querySelector(".expire").addEventListener("keypress", function(event) {
+  if(event.charCode >= 48 && event.charCode <= 57) {
+    if(this.value.length === 1) {
+      this.value += event.key + " / ";
+    } else if(this.value.length === 0) {
+      if(event.key == 1 || event.key == 0) {
+        month = event.key;
+        return event.charCode;
+      } else {
+        this.value = "0" + event.key + " / ";
+      }
+    } else if(this.value.length > 2 && this.value.length < 9) {
+      return event.charCode;
+    }
+  }
+  return false;
+});
+
+document.querySelector(".expire").addEventListener("keyup", function(event) {
+  document.querySelector(".date_value").innerHTML = this.value;
+  
+  if(event.keyCode == 8 && this.value.length == 4) {
+    this.value = month;
+  }
+  
+  if(this.value.length === 0) {
+    document.querySelector(".date_value").textContent = "MM / YYYY";
+  }
+});
+
+document.querySelector(".expire").addEventListener("keydown", function() {
+  document.querySelector(".date_value").innerHTML = this.value;
+});
+
+document.querySelector(".expire").addEventListener("focus", function() {
+  document.querySelector(".date_value").style.color = "white";
+});
+
+});
+
+</script>
+</body>
+</html>

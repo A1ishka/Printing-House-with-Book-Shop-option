@@ -8,18 +8,16 @@
 <body>
 
 <script>
-    function deleteAllCookies() {
+function deleteAllCookies() {
   var cookies = document.cookie.split(";");
-
   for (var i = 0; i < cookies.length; i++) {
     var cookie = cookies[i];
     var eqPos = cookie.indexOf("=");
     var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
     document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
   }
-  deleteAllCookies();
 }
-
+deleteAllCookies();
 </script>
 
     <div class="icon-img"><img src="../images/user-icon.png" alt="user-icon" width="10%" height="auto"></div>
@@ -32,7 +30,6 @@
     <p class="and-line">а также</p>
     <div class = "back-btn"> <a href="/"><input type="button" class="button-70" role="button" value="На главную"></a></div>
 
-    
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
     function postform() {
@@ -41,7 +38,6 @@
             event.preventDefault();
             const password = document.querySelector('#password').value;
             const email = document.querySelector('#email').value;
-            
 
             if (!password || !email) {
                 event.preventDefault();
