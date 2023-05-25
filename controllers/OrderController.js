@@ -138,7 +138,7 @@ export const changeStatusToPaid =  async (req, res) => {
     const findOrder = await OrderSchema.findById(req.params.orderId);
 	  findOrder.status = "Оплачено";
     findOrder.save();
-    res.render('cart', { PAIDstatus: findOrder.status });
+    res.render('cart', { PAIDstatus: findOrder.status, order: findOrder });
 } catch (err) {
 	console.log(err);
     res.render('./errors/500.ejs');}
