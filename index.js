@@ -59,8 +59,8 @@ app.get('/admin-books/:id', BookController.getOneToAdmin);
 app.post('/admin-books/:id', BookController.editParams);
 
 app.get('/printing-house', TOrderController.getPrintToAdmin);
-app.get('/payment', (req, res) => { res.render('./payment.ejs'); });
-app.post('/payment', OrderController.showPayment);
+app.get('/payment', checkAuth, RoleController.isUser(['USER', 'ADMIN']), OrderController.showPayment);
+app.post('/payment', OrderController.changeStatusToPaid);
 app.post('/auth/me/paid', OrderController.changeStatusToPaid);
 
 app.post('/create-book', checkAuth, RoleController.isAdmin(['USER', 'ADMIN']), Validations.bookCreateValidation, BookController.create);
@@ -87,7 +87,6 @@ app.get('/search', (req, res) => {
   const searchQuery = req.query.q;
   const minPrice = parseInt(req.query.minPrice);
   const maxPrice = parseInt(req.query.maxPrice);
-
   let filter = {};
   filter = {
     $or: [
@@ -97,7 +96,6 @@ app.get('/search', (req, res) => {
     ],
     price: { $gte: minPrice, $lte: maxPrice }
   };
-
 Book.find(filter)
   .then(results => {
     res.render('search', { results });

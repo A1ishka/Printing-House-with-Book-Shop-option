@@ -3,13 +3,13 @@ import bcrypt from 'bcrypt';
 import UserModel from '../models/User.js';
 import RoleModel from '../models/Role.js';
 
-export const register = async (req, res) => {
-  try {
-  /*const userRole = new RoleModel();
+/*const userRole = new RoleModel();
   const adminRole = new RoleModel({value:"ADMIN"})
   await userRole.save()
   await adminRole.save()
   res.json('added')*/
+export const register = async (req, res) => {
+  try {
     const password = req.body.password;
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);

@@ -44,23 +44,29 @@ export const showOrder = async (req, res) => {
 try {
   const orders = await OrderSchema.find({
     'user.userId': req.userId,
+    status: 'Формируется..'
   }).exec(); 
   const preOrderIds = orders.flatMap((order) => order.preOrder);
   const preOrders = await PreOrderSchema.find({ _id: { $in: preOrderIds } }).exec();
   res.render('cart', { orders: orders, preOrders: preOrders });
 } catch (err) {
   console.log(err);
-  res.render('./500.ejs');
+  res.render('./errors/500.ejs');
 }};
 
 export const showPayment = async (req, res) => {
   try {
-    const order = req.body.order;
-    const totalSum = req.body.totalSum;
-    res.render('./payment.ejs', { order: order, totalSum: totalSum });
+    const order = await OrderSchema.findOne({
+      'user.userId': req.userId,
+      status: 'К оплате'
+    }).exec(); 
+    console.log(order._id)
+    //const order = req.body.order;
+    //const totalSum = req.body.totalSum;
+    res.render('./payment.ejs', { order: order._id });
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }};
 
 export const showSavedOrder = async (req, res) => {
@@ -74,7 +80,7 @@ export const showSavedOrder = async (req, res) => {
     res.render('cart-history', { orders: orders, preOrders: preOrders });
   } catch (err) {
     console.log(err);
-    res.render('./500.ejs');
+    res.render('./errors/500.ejs');
   }};
 
 async function createOrder (preorderData, user){

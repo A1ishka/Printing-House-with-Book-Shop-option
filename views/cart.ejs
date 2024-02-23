@@ -151,26 +151,6 @@
   };
   request.send(JSON.stringify({ status: status }));
 }
-function PAY(){
-  event.preventDefault();
-  var order = document.getElementById('orderCancel').value;
-  var totalSum = parseInt(document.getElementById('orderTotal').value);
-  var url = '/payment';
-  const formData = {
-    order: order,
-    totalSum: totalSum,
-  };
-  fetch('/payment', {
-    method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData) })
-            .then(response => {
-            if(response.ok) alert("Успешно!")})
-            .catch(error => {
-                res.render('../errors/500.ejs');
-            })};
 
 function changeStatusToDelete(){
   event.preventDefault();

@@ -7,9 +7,9 @@
 </head>
 <body>
     <div class="tips">
-        Payment card number: (4) VISA, (51 -> 55) MasterCard, (36-38-39) DinersClub, (34-37) American Express, (65) Discover, (5019) dankort
+        Номера карт: (4) VISA, (51 -> 55) MasterCard, (36-38-39) DinersClub, (34-37) American Express, (65) Discover, (5019) dankort
     </div>
-        
+      <input type="hidden" name="orderId" value="<%= order %>" id="orderData">
         <div class="container">
           <div class="col1">
             <div class="card">
@@ -40,14 +40,15 @@
             <label>CVC:</label>
             <input class="ccv" type="text" placeholder="CVC" maxlength="3" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
             <button class="buy" onclick="sendPaymentStatus()">Оплатить</button>
-            <div class="orderId"></div>
+            <div class="history-button"><a href="/cart-history"><input type="button" class="update-data-button history" value="История заказов"> </a></div> 
+            <div id="orderId"></div>
           </div>
         </div>
 
 <script>
 function sendPaymentStatus() {
   var orderId = document.getElementById('orderData').value;
-  fetch('auth/me/paid', {
+  fetch('payment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -60,6 +61,7 @@ function sendPaymentStatus() {
   .then(response => {
     if (response.ok) {
       console.log('Запрос успешно отправлен.');
+      alert("Транзакция совершена!")
     } else {
       console.error('Произошла ошибка при отправке запроса.');
     }
@@ -68,14 +70,25 @@ function sendPaymentStatus() {
     console.error('Произошла ошибка при отправке запроса:', error);
   });
 }
-function a(){
-const payButton = document.getElementById('orderId');
-const order = "order"
-payButton.innerHTML = '<input type="hidden" name="orderId" value=order id="orderData">';
-}
+
+function PAY(){
+  event.preventDefault();
+  var order = document.getElementById('orderCancel').value;
+  var url = '/payment';
+  const formData = {
+    order: order,
+    totalSum: totalSum,
+  };
+  fetch('/payment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', },
+    body: JSON.stringify(formData) })
+    .then(response => {
+    if(response.ok) alert("Успешно!")})
+    .catch(error => { res.render('../errors/500.ejs'); })
+  };
+
 </script>
-
-
 <script>
 // 4: VISA, 51 -> 55: MasterCard, 36-38-39: DinersClub, 34-37: American Express, 65: Discover, 5019: dankort
 document.addEventListener("DOMContentLoaded", function() {
